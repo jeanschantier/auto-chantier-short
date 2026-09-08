@@ -3,1100 +3,750 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Etudereno — Créateur de Vidéo Chantier</title>
-    <meta name="description" content="Sélectionnez vos images de chantier par projet ou par service pour créer une vidéo de présentation.">
+    <title>Etudereno — Générateur de Vidéo Chantier</title>
+    <meta name="description" content="Générez automatiquement des vidéos de présentation à partir de vos photos de chantier.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --accent: #F1D835;
             --primary: #1F2332;
-            --bg-dark: #0f1117;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.18);
+            --bg: #0c0d12;
+            --bg-card: rgba(255,255,255,0.035);
+            --bg-card-hover: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.07);
+            --border-hover: rgba(255,255,255,0.16);
             --text: #e8e8ec;
-            --text-muted: #8b8b9e;
-            --glass-bg: rgba(255, 255, 255, 0.06);
-            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-muted: #7c7c90;
+            --glass: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.1);
             --radius: 16px;
             --radius-sm: 10px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg-dark);
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* === BACKGROUND GRADIENT === */
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(241, 216, 53, 0.06) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(31, 35, 50, 0.4) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(241, 216, 53, 0.03) 0%, transparent 50%);
-            z-index: 0;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 15% 40%, rgba(241,216,53,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 70%, rgba(241,216,53,0.03) 0%, transparent 50%);
             pointer-events: none;
+            z-index: 0;
         }
 
         /* === HEADER === */
         .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 16px 32px;
-            background: rgba(15, 17, 23, 0.85);
-            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 100;
+            padding: 14px 28px;
+            background: rgba(12,13,18,0.88);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-
-        .header-logo {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--accent);
-            letter-spacing: -0.5px;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 8px;
-        }
-
+        .header-logo { font-weight: 700; font-size: 1.25rem; color: var(--accent); letter-spacing: -0.5px; }
         .header-back {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
+            display: none; align-items: center; gap: 6px;
+            padding: 7px 14px; background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.82rem;
+            cursor: pointer; transition: all 0.3s var(--ease);
         }
+        .header-back:hover { background: var(--bg-card-hover); }
+        .header-back.show { display: flex; }
 
-        .header-back:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-        }
+        /* === CONTAINER === */
+        .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 36px 20px 100px; }
 
-        .header-back.visible {
-            display: flex;
-        }
+        /* === SCREENS (managed by JS) === */
+        .screen { display: none; animation: fadeUp 0.45s var(--ease); }
+        .screen.active { display: block; }
 
-        .header-badge {
-            padding: 6px 14px;
-            background: rgba(241, 216, 53, 0.1);
-            border: 1px solid rgba(241, 216, 53, 0.2);
-            border-radius: 20px;
-            color: var(--accent);
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* === MAIN CONTAINER === */
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
+        /* === HERO === */
+        .hero { text-align: center; margin-bottom: 44px; }
+        .hero h1 { font-size: clamp(1.6rem, 3.8vw, 2.4rem); font-weight: 600; line-height: 1.25; margin-bottom: 10px; }
+        .hero h1 em { font-style: normal; color: var(--accent); }
+        .hero p { font-size: 0.95rem; font-weight: 300; color: var(--text-muted); max-width: 480px; margin: 0 auto; line-height: 1.6; }
 
-        /* === HERO SECTION === */
-        .hero {
-            text-align: center;
-            margin-bottom: 48px;
-            animation: fadeInUp 0.6s ease-out;
+        /* === MODE BUTTONS === */
+        .mode-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+            max-width: 640px; margin: 0 auto;
         }
+        .mode-btn {
+            position: relative; padding: 36px 24px; text-align: center;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); cursor: pointer;
+            transition: all 0.35s var(--ease); overflow: hidden;
+        }
+        .mode-btn::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(241,216,53,0.07), transparent 60%);
+            opacity: 0; transition: opacity 0.35s;
+        }
+        .mode-btn:hover { border-color: rgba(241,216,53,0.28); transform: translateY(-3px); box-shadow: 0 14px 44px rgba(0,0,0,0.3); }
+        .mode-btn:hover::after { opacity: 1; }
+        .mode-btn .icon { position: relative; z-index: 1; font-size: 2rem; margin-bottom: 10px; }
+        .mode-btn h2 { position: relative; z-index: 1; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+        .mode-btn p { position: relative; z-index: 1; font-size: 0.8rem; color: var(--text-muted); font-weight: 300; }
+        .mode-btn .count { position: relative; z-index: 1; margin-top: 10px; font-size: 0.72rem; color: var(--accent); font-weight: 500; }
 
-        .hero h1 {
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-
-        .hero h1 span {
-            color: var(--accent);
-        }
-
-        .hero p {
-            font-size: 1rem;
-            font-weight: 300;
-            color: var(--text-muted);
-            max-width: 520px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* === MODE SELECTOR === */
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            max-width: 700px;
-            margin: 0 auto 48px;
-            animation: fadeInUp 0.6s ease-out 0.15s both;
-        }
-
-        .mode-card {
-            position: relative;
-            padding: 40px 28px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .mode-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(241, 216, 53, 0.08), transparent 60%);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .mode-card:hover {
-            border-color: rgba(241, 216, 53, 0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(241, 216, 53, 0.1);
-        }
-
-        .mode-card:hover::before {
-            opacity: 1;
-        }
-
-        .mode-card.active {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(241, 216, 53, 0.15);
-        }
-
-        .mode-icon {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            background: rgba(241, 216, 53, 0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .mode-card h2 {
-            position: relative;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .mode-card p {
-            position: relative;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 300;
-            line-height: 1.5;
-        }
-
-        .mode-count {
-            position: relative;
-            margin-top: 14px;
-            font-size: 0.75rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        /* === CONTENT VIEWS === */
-        .content-view {
-            display: none;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        .content-view.active {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title span {
-            color: var(--accent);
-        }
-
-        /* === PROJECT / SERVICE GRID === */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
+        /* === CARDS GRID === */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; }
+        .section-title em { font-style: normal; color: var(--accent); }
 
         .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            cursor: pointer;
-            transition: var(--transition);
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden; cursor: pointer;
+            transition: all 0.3s var(--ease);
+        }
+        .card:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(0,0,0,0.25); }
+        .card-thumb { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background: rgba(255,255,255,0.02); }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+        .card:hover .card-thumb img { transform: scale(1.05); }
+        .card-thumb .overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 10px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.65));
+            display: flex; gap: 5px;
+        }
+        .badge { padding: 2px 7px; border-radius: 4px; font-size: 0.6rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+        .badge-avant { background: rgba(239,68,68,0.7); }
+        .badge-pendant { background: rgba(245,158,11,0.7); }
+        .badge-après { background: rgba(34,197,94,0.7); }
+        .card-info { padding: 14px; }
+        .card-info h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; line-height: 1.3; }
+        .card-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 300; display: flex; gap: 10px; }
+
+        /* === SERVICE MOSAIC === */
+        .mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 100%; height: 100%; }
+        .mosaic img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* === THEME SELECTOR === */
+        .theme-header { text-align: center; margin-bottom: 36px; }
+        .theme-header h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; }
+        .theme-header p { color: var(--text-muted); font-weight: 300; font-size: 0.9rem; }
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; max-width: 900px; margin: 0 auto; }
+
+        .theme-card {
+            padding: 28px 24px; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); cursor: pointer; transition: all 0.35s var(--ease);
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .theme-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(241,216,53,0.06), transparent 60%);
+            opacity: 0; transition: opacity 0.35s;
+        }
+        .theme-card:hover { border-color: rgba(241,216,53,0.3); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+        .theme-card:hover::before { opacity: 1; }
+        .theme-card .t-icon { position: relative; font-size: 2.4rem; margin-bottom: 12px; }
+        .theme-card h3 { position: relative; font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+        .theme-card p { position: relative; font-size: 0.8rem; color: var(--text-muted); font-weight: 300; line-height: 1.5; }
+        .theme-card .t-count { position: relative; margin-top: 12px; font-size: 0.72rem; color: var(--accent); font-weight: 500; }
+
+        /* === VIDEO GENERATION SCREEN === */
+        .gen-container { text-align: center; }
+        .gen-container h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 6px; }
+        .gen-container .gen-sub { color: var(--text-muted); font-size: 0.85rem; font-weight: 300; margin-bottom: 32px; }
+
+        .canvas-wrapper {
+            display: inline-block; position: relative;
+            border-radius: var(--radius); overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+            margin-bottom: 28px;
+        }
+        canvas#videoCanvas { display: block; width: 270px; height: 480px; background: #111; }
+
+        .progress-bar-outer {
+            width: 300px; height: 6px; background: rgba(255,255,255,0.08);
+            border-radius: 3px; margin: 0 auto 18px; overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%; width: 0%; background: var(--accent);
+            border-radius: 3px; transition: width 0.3s;
         }
 
-        .card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-        }
+        .gen-status { color: var(--text-muted); font-size: 0.82rem; font-weight: 400; margin-bottom: 20px; }
 
-        .card-thumb {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 10;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
+        .gen-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 11px 26px; border: none; border-radius: var(--radius-sm);
+            font-family: inherit; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s var(--ease);
         }
-
-        .card-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card:hover .card-thumb img {
-            transform: scale(1.06);
-        }
-
-        .card-thumb-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 8px 12px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .phase-badge {
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .phase-avant { background: rgba(239, 68, 68, 0.7); }
-        .phase-pendant { background: rgba(245, 158, 11, 0.7); }
-        .phase-après { background: rgba(34, 197, 94, 0.7); }
-
-        .card-info {
-            padding: 16px;
-        }
-
-        .card-info h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .card-info .card-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-
-        .card-info .card-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* === SERVICE CARDS (larger icons) === */
-        .service-card .card-thumb {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(241, 216, 53, 0.06), rgba(31, 35, 50, 0.3));
-        }
-
-        .service-card .card-thumb .service-mosaic {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .service-card .card-thumb .service-mosaic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* === DETAIL VIEW (images for a project/service) === */
-        .detail-header {
-            margin-bottom: 24px;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        .detail-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .detail-header .detail-stats {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .detail-stat {
-            padding: 6px 14px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 400;
-            color: var(--text-muted);
-        }
-
-        .detail-stat strong {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .phase-filters {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.4s ease-out 0.1s both;
-        }
-
-        .phase-filter {
-            padding: 8px 18px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--text-muted);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 400;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .phase-filter:hover {
-            background: var(--bg-card-hover);
-            color: var(--text);
-        }
-
-        .phase-filter.active {
-            background: rgba(241, 216, 53, 0.15);
-            border-color: rgba(241, 216, 53, 0.3);
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            animation: fadeInUp 0.4s ease-out 0.2s both;
-        }
-
-        .image-item {
-            position: relative;
-            aspect-ratio: 4 / 3;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition);
-        }
-
-        .image-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .image-item:hover img {
-            transform: scale(1.08);
-        }
-
-        .image-item:hover {
-            border-color: rgba(241, 216, 53, 0.4);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-item.selected {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent), 0 4px 20px rgba(241, 216, 53, 0.2);
-        }
-
-        .image-item.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .image-item .image-phase {
-            position: absolute;
-            bottom: 6px;
-            left: 6px;
-        }
-
-        /* === SELECTION BAR === */
-        .selection-bar {
-            position: fixed;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 14px 28px;
-            background: rgba(31, 35, 50, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(241, 216, 53, 0.3);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            z-index: 200;
-            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
-        }
-
-        .selection-bar.visible {
-            bottom: 24px;
-        }
-
-        .selection-bar .sel-count {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--accent);
-            white-space: nowrap;
-        }
-
-        .selection-bar button {
-            padding: 10px 24px;
-            background: var(--accent);
-            color: var(--primary);
-            border: none;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .selection-bar button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(241, 216, 53, 0.3);
-        }
-
-        .selection-bar .sel-clear {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--glass-border);
-            font-weight: 400;
-        }
-
-        /* === LIGHTBOX === */
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-out;
-        }
-
-        .lightbox.open {
-            display: flex;
-            animation: fadeIn 0.2s ease;
-        }
-
-        .lightbox img {
-            max-width: 90vw;
-            max-height: 90vh;
-            object-fit: contain;
-            border-radius: 8px;
-            cursor: default;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* === ANIMATIONS === */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .btn-primary { background: var(--accent); color: var(--primary); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(241,216,53,0.3); }
+        .btn-secondary { background: var(--glass); color: var(--text); border: 1px solid var(--glass-border); }
+        .btn-secondary:hover { background: var(--bg-card-hover); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
         /* === RESPONSIVE === */
-        @media (max-width: 640px) {
-            .mode-selector {
-                grid-template-columns: 1fr;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .image-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            }
-
-            .container {
-                padding: 24px 16px;
-            }
-
-            .selection-bar {
-                left: 16px;
-                right: 16px;
-                transform: none;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-
-        /* === LOADING SPINNER === */
-        .loader {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 0;
-        }
-
-        .loader::after {
-            content: '';
-            width: 36px;
-            height: 36px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* === EMPTY STATE === */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state .empty-icon {
-            font-size: 3rem;
-            margin-bottom: 12px;
+        @media (max-width: 600px) {
+            .mode-grid, .theme-grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: 1fr; }
+            .container { padding: 20px 14px 80px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-logo">ETUDERENO</div>
-        <div class="header-nav">
-            <button class="header-back" id="btnBack" onclick="goBack()">← Retour</button>
-            <div class="header-badge" id="selectionBadge">0 sélectionnées</div>
+<header class="header">
+    <div class="header-logo">ETUDERENO</div>
+    <button class="header-back" id="btnBack" onclick="goBack()">← Retour</button>
+</header>
+
+<div class="container">
+
+    <!-- SCREEN 1: HOME -->
+    <div class="screen active" id="screenHome">
+        <div class="hero">
+            <h1>Générez votre <em>vidéo de présentation</em></h1>
+            <p>Choisissez un projet ou un service, sélectionnez un thème, et la vidéo se génère automatiquement.</p>
         </div>
-    </header>
-
-    <div class="container">
-
-        <!-- HERO -->
-        <section class="hero" id="heroSection">
-            <h1>Créez votre <span>vidéo de présentation</span></h1>
-            <p>Sélectionnez vos images par projet accompli ou par type de service pour générer une vidéo professionnelle.</p>
-        </section>
-
-        <!-- MODE SELECTOR -->
-        <section class="mode-selector" id="modeSelector">
-            <div class="mode-card" onclick="showView('projects')">
-                <div class="mode-icon">🏗️</div>
+        <div class="mode-grid">
+            <div class="mode-btn" onclick="goTo('list','projects')">
+                <div class="icon">🏗️</div>
                 <h2>Projets</h2>
-                <p>Parcourir par chantier accompli avec les photos avant / pendant / après</p>
-                <div class="mode-count" id="projectCount">—</div>
+                <p>Chantiers accomplis avec avant / pendant / après</p>
+                <div class="count" id="cntProjects">—</div>
             </div>
-            <div class="mode-card" onclick="showView('services')">
-                <div class="mode-icon">🔧</div>
+            <div class="mode-btn" onclick="goTo('list','services')">
+                <div class="icon">🔧</div>
                 <h2>Services</h2>
-                <p>Parcourir par catégorie : salle de bain, cuisine, escalier, etc.</p>
-                <div class="mode-count" id="serviceCount">—</div>
+                <p>Catégories : salle de bain, cuisine, escalier…</p>
+                <div class="count" id="cntServices">—</div>
             </div>
-        </section>
-
-        <!-- PROJECTS VIEW -->
-        <section class="content-view" id="projectsView">
-            <h2 class="section-title">🏗️ <span>Projets accomplis</span></h2>
-            <div class="grid" id="projectsGrid"></div>
-        </section>
-
-        <!-- SERVICES VIEW -->
-        <section class="content-view" id="servicesView">
-            <h2 class="section-title">🔧 <span>Services</span></h2>
-            <div class="grid" id="servicesGrid"></div>
-        </section>
-
-        <!-- DETAIL VIEW -->
-        <section class="content-view" id="detailView">
-            <div class="detail-header" id="detailHeader"></div>
-            <div class="phase-filters" id="phaseFilters"></div>
-            <div class="image-grid" id="imageGrid"></div>
-        </section>
-
+        </div>
     </div>
 
-    <!-- SELECTION BAR -->
-    <div class="selection-bar" id="selectionBar">
-        <span class="sel-count" id="selCount">0 images</span>
-        <button class="sel-clear" onclick="clearSelection()">Tout désélectionner</button>
-        <button onclick="exportSelection()">📹 Exporter la sélection</button>
+    <!-- SCREEN 2: LIST (projects or services) -->
+    <div class="screen" id="screenList">
+        <h2 class="section-title" id="listTitle"></h2>
+        <div class="grid" id="listGrid"></div>
     </div>
 
-    <!-- LIGHTBOX -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <img id="lightboxImg" src="" alt="">
+    <!-- SCREEN 3: THEME SELECTOR -->
+    <div class="screen" id="screenTheme">
+        <div class="theme-header">
+            <h2 id="themeTitle"></h2>
+            <p>Quel type de vidéo souhaitez-vous générer ?</p>
+        </div>
+        <div class="theme-grid" id="themeGrid"></div>
     </div>
 
-    <script>
-        // === STATE ===
-        let db = [];
-        let selectedImages = new Set();
-        let currentView = 'home'; // home | projects | services | detail
-        let viewHistory = [];
+    <!-- SCREEN 4: VIDEO GENERATION -->
+    <div class="screen" id="screenGen">
+        <div class="gen-container">
+            <h2 id="genTitle">Génération en cours…</h2>
+            <p class="gen-sub" id="genSub"></p>
+            <div class="canvas-wrapper">
+                <canvas id="videoCanvas" width="1080" height="1920"></canvas>
+            </div>
+            <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+            <p class="gen-status" id="genStatus">Préparation…</p>
+            <div class="gen-actions">
+                <button class="btn btn-primary" id="btnDownload" disabled onclick="downloadVideo()">⬇ Télécharger la vidéo</button>
+                <button class="btn btn-secondary" onclick="goBack()">← Autre vidéo</button>
+            </div>
+        </div>
+    </div>
 
-        // === INIT ===
-        async function init() {
-            try {
-                const res = await fetch('chantiers_db.json');
-                db = await res.json();
-                updateCounts();
-            } catch (err) {
-                console.error('Erreur chargement base de données:', err);
-            }
-        }
+</div>
 
-        function updateCounts() {
-            const projects = getProjects();
-            const services = getServices();
-            document.getElementById('projectCount').textContent = `${projects.length} projets`;
-            document.getElementById('serviceCount').textContent = `${services.length} catégories`;
-        }
+<script>
+// ============================
+// STATE
+// ============================
+let db = [];
+let history = [];
+let currentScreen = 'screenHome';
+let currentListMode = null;   // 'projects' | 'services'
+let selectedTarget = null;    // { type, key, label, images }
+let generatedBlob = null;
 
-        // === DATA HELPERS ===
-        function getProjects() {
-            const projectMap = {};
-            db.forEach(item => {
-                const proj = item.projet;
-                if (!proj) return;
-                if (!projectMap[proj]) {
-                    projectMap[proj] = {
-                        name: proj,
-                        images: [],
-                        phases: new Set(),
-                        type: item.type_projet,
-                        style: item.style
-                    };
-                }
-                projectMap[proj].images.push(item);
-                if (item.phase) projectMap[proj].phases.add(item.phase);
-            });
-            return Object.values(projectMap).sort((a, b) => b.images.length - a.images.length);
-        }
+// ============================
+// INIT
+// ============================
+async function init() {
+    const res = await fetch('chantiers_db.json');
+    db = await res.json();
+    document.getElementById('cntProjects').textContent = `${getProjects().length} projets`;
+    document.getElementById('cntServices').textContent = `${getServices().length} catégories`;
+}
 
-        function getServices() {
-            const serviceMap = {};
-            db.forEach(item => {
-                const type = item.type_projet;
-                if (!type) return;
-                if (!serviceMap[type]) {
-                    serviceMap[type] = {
-                        name: type,
-                        label: formatServiceName(type),
-                        images: [],
-                        icon: getServiceIcon(type)
-                    };
-                }
-                serviceMap[type].images.push(item);
-            });
-            return Object.values(serviceMap).sort((a, b) => b.images.length - a.images.length);
-        }
+// ============================
+// DATA
+// ============================
+function getProjects() {
+    const m = {};
+    db.forEach(i => {
+        if (!i.projet) return;
+        if (!m[i.projet]) m[i.projet] = { name: i.projet, images: [], phases: new Set(), type: i.type_projet };
+        m[i.projet].images.push(i);
+        if (i.phase) m[i.projet].phases.add(i.phase);
+    });
+    return Object.values(m).sort((a,b) => b.images.length - a.images.length);
+}
 
-        function formatServiceName(name) {
-            const labels = {
-                'salle_de_bain': 'Salle de Bain',
-                'cuisine': 'Cuisine',
-                'renovation_complete': 'Rénovation Complète',
-                'dressing': 'Dressing & Aménagement',
-                'terrasse': 'Terrasse & Étanchéité',
-                'ipn': 'IPN & Structure',
-                'toile_tendue': 'Toile Tendue',
-                'escalier': 'Escalier',
-                'toilettes': 'Toilettes',
-                'portail': 'Portail',
-                'cheminee': 'Cheminée'
-            };
-            return labels[name] || name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        }
+function getServices() {
+    const m = {};
+    db.forEach(i => {
+        if (!i.type_projet) return;
+        if (!m[i.type_projet]) m[i.type_projet] = { name: i.type_projet, label: fmtService(i.type_projet), images: [], icon: svcIcon(i.type_projet) };
+        m[i.type_projet].images.push(i);
+    });
+    return Object.values(m).sort((a,b) => b.images.length - a.images.length);
+}
 
-        function getServiceIcon(type) {
-            const icons = {
-                'salle_de_bain': '🚿',
-                'cuisine': '🍳',
-                'renovation_complete': '🏠',
-                'dressing': '👔',
-                'terrasse': '🌳',
-                'ipn': '🔩',
-                'toile_tendue': '🎨',
-                'escalier': '🪜',
-                'toilettes': '🚽',
-                'portail': '🚪',
-                'cheminee': '🔥'
-            };
-            return icons[type] || '🔧';
-        }
+function fmtService(n) {
+    return { salle_de_bain:'Salle de Bain', cuisine:'Cuisine', renovation_complete:'Rénovation Complète',
+        dressing:'Dressing & Aménagement', terrasse:'Terrasse & Étanchéité', ipn:'IPN & Structure',
+        toile_tendue:'Toile Tendue', escalier:'Escalier', toilettes:'Toilettes', portail:'Portail', cheminee:'Cheminée'
+    }[n] || n.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+}
 
-        function formatProjectName(name) {
-            // Clean up project names for display
-            let clean = name.split('/').pop();
-            clean = clean.replace(/^(Chantier|Projet|SDB)\s*/i, '');
-            return clean || name;
-        }
+function svcIcon(t) {
+    return { salle_de_bain:'🚿', cuisine:'🍳', renovation_complete:'🏠', dressing:'👔', terrasse:'🌳',
+        ipn:'🔩', toile_tendue:'🎨', escalier:'🪜', toilettes:'🚽', portail:'🚪', cheminee:'🔥' }[t] || '🔧';
+}
 
-        function getAfterImage(images) {
-            // Prefer 'après' images for thumbnails
-            const after = images.find(i => i.phase === 'après');
-            if (after) return after;
-            const pendant = images.find(i => i.phase === 'pendant');
-            if (pendant) return pendant;
-            return images[0];
-        }
+function fmtProject(n) {
+    let c = n.split('/').pop();
+    return c.replace(/^(Chantier|Projet|SDB)\s*/i, '') || n;
+}
 
-        // === VIEWS ===
-        function showView(view, data) {
-            viewHistory.push(currentView);
-            currentView = view;
+function bestThumb(imgs) {
+    return imgs.find(i=>i.phase==='après') || imgs.find(i=>i.phase==='pendant') || imgs[0];
+}
 
-            document.getElementById('modeSelector').style.display = view === 'home' ? 'grid' : 'none';
-            document.getElementById('heroSection').style.display = view === 'home' ? 'block' : 'none';
-            document.getElementById('projectsView').classList.toggle('active', view === 'projects');
-            document.getElementById('servicesView').classList.toggle('active', view === 'services');
-            document.getElementById('detailView').classList.toggle('active', view === 'detail');
-            document.getElementById('btnBack').classList.toggle('visible', view !== 'home');
+// ============================
+// NAVIGATION
+// ============================
+function goTo(screen, data) {
+    history.push({ screen: currentScreen, data: currentListMode });
+    show(screen, data);
+}
 
-            if (view === 'projects') renderProjects();
-            if (view === 'services') renderServices();
-            if (view === 'detail') renderDetail(data);
-        }
+function goBack() {
+    const prev = history.pop();
+    if (!prev) { show('screenHome'); return; }
+    show(prev.screen, prev.data);
+}
 
-        function goBack() {
-            const prev = viewHistory.pop();
-            if (!prev || prev === 'home') {
-                currentView = 'home';
-                document.getElementById('modeSelector').style.display = 'grid';
-                document.getElementById('heroSection').style.display = 'block';
-                document.getElementById('projectsView').classList.remove('active');
-                document.getElementById('servicesView').classList.remove('active');
-                document.getElementById('detailView').classList.remove('active');
-                document.getElementById('btnBack').classList.remove('visible');
-            } else {
-                viewHistory.pop(); // Remove extra entry since showView pushes
-                showView(prev);
-            }
-        }
+function show(screen, data) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-        // === RENDER PROJECTS ===
-        function renderProjects() {
-            const grid = document.getElementById('projectsGrid');
-            const projects = getProjects();
+    if (screen === 'list') {
+        currentListMode = data;
+        renderList(data);
+        screen = 'screenList';
+    } else if (screen === 'theme') {
+        selectedTarget = data;
+        renderThemes();
+        screen = 'screenTheme';
+    } else if (screen === 'gen') {
+        screen = 'screenGen';
+        startGeneration(data);
+    } else if (screen === 'screenHome') {
+        // reset
+    }
 
-            grid.innerHTML = projects.map(proj => {
-                const thumb = getAfterImage(proj.images);
-                const phases = Array.from(proj.phases).filter(p => p !== 'non_defini');
-                return `
-                    <div class="card" onclick="showView('detail', { type: 'project', key: '${proj.name.replace(/'/g, "\\'")}' })">
-                        <div class="card-thumb">
-                            <img src="${thumb.path}" alt="${proj.name}" loading="lazy">
-                            <div class="card-thumb-overlay">
-                                ${phases.map(p => `<span class="phase-badge phase-${p}">${p}</span>`).join('')}
-                            </div>
-                        </div>
-                        <div class="card-info">
-                            <h3>${formatProjectName(proj.name)}</h3>
-                            <div class="card-meta">
-                                <span>📷 ${proj.images.length} photos</span>
-                                <span>🏷️ ${formatServiceName(proj.type)}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+    currentScreen = screen;
+    document.getElementById(screen).classList.add('active');
+    document.getElementById('btnBack').classList.toggle('show', screen !== 'screenHome');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        // === RENDER SERVICES ===
-        function renderServices() {
-            const grid = document.getElementById('servicesGrid');
-            const services = getServices();
+// ============================
+// LIST RENDER
+// ============================
+function renderList(mode) {
+    const grid = document.getElementById('listGrid');
+    const title = document.getElementById('listTitle');
 
-            grid.innerHTML = services.map(svc => {
-                // Get 4 random 'après' images for mosaic
-                const afterImages = svc.images.filter(i => i.phase === 'après');
-                const mosaicImages = (afterImages.length >= 4 ? afterImages : svc.images).slice(0, 4);
-
-                return `
-                    <div class="card service-card" onclick="showView('detail', { type: 'service', key: '${svc.name}' })">
-                        <div class="card-thumb">
-                            <div class="service-mosaic">
-                                ${mosaicImages.map(img => `<img src="${img.path}" alt="" loading="lazy">`).join('')}
-                            </div>
-                        </div>
-                        <div class="card-info">
-                            <h3>${svc.icon} ${svc.label}</h3>
-                            <div class="card-meta">
-                                <span>📷 ${svc.images.length} photos</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // === RENDER DETAIL ===
-        function renderDetail(data) {
-            let images = [];
-            let title = '';
-
-            if (data.type === 'project') {
-                images = db.filter(i => i.projet === data.key);
-                title = formatProjectName(data.key);
-            } else {
-                images = db.filter(i => i.type_projet === data.key);
-                title = `${getServiceIcon(data.key)} ${formatServiceName(data.key)}`;
-            }
-
-            // Header
-            const phases = [...new Set(images.map(i => i.phase).filter(p => p && p !== 'non_defini'))];
-            const elements = [...new Set(images.flatMap(i => i.elements || []))];
-
-            document.getElementById('detailHeader').innerHTML = `
-                <h2>${title}</h2>
-                <div class="detail-stats">
-                    <div class="detail-stat"><strong>${images.length}</strong> photos</div>
-                    ${phases.length ? `<div class="detail-stat"><strong>${phases.length}</strong> phases</div>` : ''}
-                    ${elements.length ? `<div class="detail-stat"><strong>${elements.length}</strong> éléments détectés</div>` : ''}
+    if (mode === 'projects') {
+        title.innerHTML = '🏗️ <em>Projets accomplis</em>';
+        const projects = getProjects();
+        grid.innerHTML = projects.map(p => {
+            const t = bestThumb(p.images);
+            const ph = [...p.phases].filter(x=>x!=='non_defini');
+            return `<div class="card" onclick="goTo('theme',{type:'project',key:'${esc(p.name)}',label:'${esc(fmtProject(p.name))}',images:null})">
+                <div class="card-thumb">
+                    <img src="${t.path}" alt="" loading="lazy">
+                    <div class="overlay">${ph.map(x=>`<span class="badge badge-${x}">${x}</span>`).join('')}</div>
                 </div>
-            `;
-
-            // Phase filters
-            const filtersContainer = document.getElementById('phaseFilters');
-            filtersContainer.innerHTML = `
-                <button class="phase-filter active" onclick="filterPhase('all', this)">Tout</button>
-                ${phases.map(p => `<button class="phase-filter" onclick="filterPhase('${p}', this)">${p.charAt(0).toUpperCase() + p.slice(1)}</button>`).join('')}
-                <button class="phase-filter" onclick="selectAllVisible()" style="margin-left: auto;">☑ Tout sélectionner</button>
-            `;
-
-            // Images
-            renderImageGrid(images);
-        }
-
-        function renderImageGrid(images, phaseFilter = 'all') {
-            const filtered = phaseFilter === 'all' ? images : images.filter(i => i.phase === phaseFilter);
-            const grid = document.getElementById('imageGrid');
-
-            grid.innerHTML = filtered.map(img => `
-                <div class="image-item ${selectedImages.has(img.path) ? 'selected' : ''}"
-                     data-path="${img.path}"
-                     onclick="toggleImage(event, '${img.path}')"
-                     ondblclick="openLightbox('${img.path}')">
-                    <img src="${img.path}" alt="${img.filename}" loading="lazy">
-                    ${img.phase && img.phase !== 'non_defini' ? `<span class="image-phase phase-badge phase-${img.phase}">${img.phase}</span>` : ''}
+                <div class="card-info">
+                    <h3>${fmtProject(p.name)}</h3>
+                    <div class="card-meta"><span>📷 ${p.images.length}</span><span>🏷️ ${fmtService(p.type)}</span></div>
                 </div>
-            `).join('');
+            </div>`;
+        }).join('');
+    } else {
+        title.innerHTML = '🔧 <em>Services</em>';
+        const services = getServices();
+        grid.innerHTML = services.map(s => {
+            const mosaic = (s.images.filter(i=>i.phase==='après').length>=4 ? s.images.filter(i=>i.phase==='après') : s.images).slice(0,4);
+            return `<div class="card" onclick="goTo('theme',{type:'service',key:'${esc(s.name)}',label:'${esc(s.label)}',images:null})">
+                <div class="card-thumb">
+                    <div class="mosaic">${mosaic.map(i=>`<img src="${i.path}" alt="" loading="lazy">`).join('')}</div>
+                </div>
+                <div class="card-info">
+                    <h3>${s.icon} ${s.label}</h3>
+                    <div class="card-meta"><span>📷 ${s.images.length}</span></div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+}
+
+function esc(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+// ============================
+// THEME RENDER
+// ============================
+function renderThemes() {
+    const target = selectedTarget;
+    const images = target.type === 'project'
+        ? db.filter(i => i.projet === target.key)
+        : db.filter(i => i.type_projet === target.key);
+
+    document.getElementById('themeTitle').textContent = target.label;
+
+    const hasAvant = images.some(i => i.phase === 'avant');
+    const hasPendant = images.some(i => i.phase === 'pendant');
+    const hasApres = images.some(i => i.phase === 'après');
+
+    const themes = [];
+
+    if (hasApres) {
+        themes.push({
+            id: 'result',
+            icon: '✨',
+            title: 'Résultat seulement',
+            desc: 'Vidéo montrant uniquement le résultat final — idéal pour impressionner.',
+            count: images.filter(i => i.phase === 'après').length
+        });
+    }
+
+    if (hasAvant && hasApres) {
+        themes.push({
+            id: 'before_after',
+            icon: '🔄',
+            title: 'Avant / Après',
+            desc: 'Montrer la transformation avec les photos avant puis après.',
+            count: images.filter(i => i.phase === 'avant' || i.phase === 'après').length
+        });
+    }
+
+    if (hasPendant || (hasAvant && hasApres)) {
+        themes.push({
+            id: 'process',
+            icon: '🎬',
+            title: 'Process de construction',
+            desc: 'Toutes les étapes : avant → pendant → après. Montrer le savoir-faire.',
+            count: images.filter(i => i.phase !== 'non_defini').length
+        });
+    }
+
+    // Always offer a "all images" option
+    themes.push({
+        id: 'all',
+        icon: '📸',
+        title: 'Toutes les photos',
+        desc: 'Utiliser toutes les images disponibles dans un diaporama complet.',
+        count: images.length
+    });
+
+    const grid = document.getElementById('themeGrid');
+    grid.innerHTML = themes.map(t => `
+        <div class="theme-card" onclick="goTo('gen',{theme:'${t.id}',target:selectedTarget})">
+            <div class="t-icon">${t.icon}</div>
+            <h3>${t.title}</h3>
+            <p>${t.desc}</p>
+            <div class="t-count">${t.count} photos disponibles</div>
+        </div>
+    `).join('');
+}
+
+// ============================
+// VIDEO GENERATION
+// ============================
+let mediaRecorder = null;
+let recordedChunks = [];
+
+async function startGeneration(data) {
+    const { theme, target } = data;
+    generatedBlob = null;
+    recordedChunks = [];
+    document.getElementById('btnDownload').disabled = true;
+
+    // Get images for this theme
+    let allImages = target.type === 'project'
+        ? db.filter(i => i.projet === target.key)
+        : db.filter(i => i.type_projet === target.key);
+
+    let images = [];
+    const themeLabels = {
+        result: 'Résultat seulement',
+        before_after: 'Avant / Après',
+        process: 'Process de construction',
+        all: 'Toutes les photos'
+    };
+
+    document.getElementById('genTitle').textContent = target.label;
+    document.getElementById('genSub').textContent = themeLabels[theme] || theme;
+
+    switch (theme) {
+        case 'result':
+            images = allImages.filter(i => i.phase === 'après');
+            break;
+        case 'before_after':
+            const avant = allImages.filter(i => i.phase === 'avant');
+            const apres = allImages.filter(i => i.phase === 'après');
+            images = [...avant, ...apres];
+            break;
+        case 'process':
+            const phaseOrder = { avant: 0, pendant: 1, 'après': 2, non_defini: 3 };
+            images = allImages.filter(i => i.phase !== 'non_defini').sort((a,b) => (phaseOrder[a.phase]||3) - (phaseOrder[b.phase]||3));
+            break;
+        default:
+            images = allImages;
+    }
+
+    if (images.length === 0) {
+        document.getElementById('genStatus').textContent = 'Aucune image disponible pour ce thème.';
+        return;
+    }
+
+    // Limit to 30 images max for reasonable video length
+    if (images.length > 30) images = images.slice(0, 30);
+
+    await generateVideo(images, theme);
+}
+
+async function generateVideo(images, theme) {
+    const canvas = document.getElementById('videoCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1080, H = 1920;
+    canvas.width = W;
+    canvas.height = H;
+
+    const status = document.getElementById('genStatus');
+    const progress = document.getElementById('progressBar');
+
+    status.textContent = `Chargement des images (0/${images.length})…`;
+
+    // Preload all images
+    const loadedImgs = [];
+    for (let i = 0; i < images.length; i++) {
+        status.textContent = `Chargement des images (${i+1}/${images.length})…`;
+        progress.style.width = `${((i+1)/images.length) * 30}%`;
+        try {
+            const img = await loadImage(images[i].path);
+            loadedImgs.push({ img, data: images[i] });
+        } catch(e) {
+            console.warn('Failed to load:', images[i].path);
         }
+    }
 
-        // Store current detail data for phase filtering
-        let currentDetailData = null;
+    if (loadedImgs.length === 0) {
+        status.textContent = 'Erreur : impossible de charger les images.';
+        return;
+    }
 
-        function filterPhase(phase, btn) {
-            document.querySelectorAll('.phase-filter').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    status.textContent = 'Génération de la vidéo…';
+    progress.style.width = '30%';
 
-            const detailView = document.getElementById('detailView');
-            // Determine images from context
-            const headerText = document.getElementById('detailHeader').querySelector('h2').textContent;
+    // Setup MediaRecorder
+    const stream = canvas.captureStream(30);
+    mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm;codecs=vp9',
+        videoBitsPerSecond: 5000000
+    });
 
-            let images = db.filter(i => {
-                // Match by formatted project or service name
-                return i.projet && formatProjectName(i.projet) === headerText ||
-                       i.type_projet && `${getServiceIcon(i.type_projet)} ${formatServiceName(i.type_projet)}` === headerText;
-            });
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+        generatedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+        document.getElementById('btnDownload').disabled = false;
+        status.textContent = `✅ Vidéo générée ! (${loadedImgs.length} images, ${Math.round(generatedBlob.size/1024)}KB)`;
+        progress.style.width = '100%';
+    };
 
-            if (!images.length) images = db; // fallback
+    mediaRecorder.start();
 
-            renderImageGrid(images, phase);
-        }
+    // Render each image with Ken Burns + transition
+    const DURATION_PER_IMAGE = 2000; // ms
+    const TRANSITION = 400; // ms
 
-        // === SELECTION ===
-        function toggleImage(event, path) {
-            event.stopPropagation();
-            if (selectedImages.has(path)) {
-                selectedImages.delete(path);
-            } else {
-                selectedImages.add(path);
+    for (let i = 0; i < loadedImgs.length; i++) {
+        const { img, data: imgData } = loadedImgs[i];
+        const startTime = performance.now();
+        const totalDur = DURATION_PER_IMAGE + TRANSITION;
+
+        await new Promise(resolve => {
+            function frame() {
+                const elapsed = performance.now() - startTime;
+                const t = Math.min(elapsed / totalDur, 1);
+
+                // Clear
+                ctx.fillStyle = '#0c0d12';
+                ctx.fillRect(0, 0, W, H);
+
+                // Ken Burns: slight zoom from 1.0 to 1.08
+                const scale = 1 + 0.08 * t;
+                const panX = Math.sin(i * 1.5) * 20 * t;
+                const panY = Math.cos(i * 1.5) * 15 * t;
+
+                // Draw image to fill canvas (cover)
+                ctx.save();
+                ctx.translate(W/2 + panX, H/2 + panY);
+                ctx.scale(scale, scale);
+
+                const imgRatio = img.width / img.height;
+                const canvasRatio = W / H;
+                let dw, dh;
+                if (imgRatio > canvasRatio) {
+                    dh = H; dw = H * imgRatio;
+                } else {
+                    dw = W; dh = W / imgRatio;
+                }
+                ctx.drawImage(img, -dw/2, -dh/2, dw, dh);
+                ctx.restore();
+
+                // Fade in
+                if (elapsed < TRANSITION) {
+                    const fadeT = elapsed / TRANSITION;
+                    ctx.fillStyle = `rgba(12,13,18,${1 - fadeT})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+
+                // Phase label
+                if (imgData.phase && imgData.phase !== 'non_defini') {
+                    const label = imgData.phase.toUpperCase();
+                    const colors = { AVANT: '#ef4444', PENDANT: '#f59e0b', 'APRÈS': '#22c55e' };
+                    ctx.save();
+                    ctx.fillStyle = colors[label] || '#888';
+                    const pillW = ctx.measureText ? 180 : 180;
+                    roundRect(ctx, 40, H - 120, pillW, 50, 12);
+                    ctx.fill();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '600 28px Poppins, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(label, 40 + pillW/2, H - 87);
+                    ctx.restore();
+                }
+
+                // Progress overlay
+                const progY = H - 20;
+                ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                ctx.fillRect(0, progY, W, 8);
+                ctx.fillStyle = '#F1D835';
+                ctx.fillRect(0, progY, W * ((i + t) / loadedImgs.length), 8);
+
+                // Update external progress
+                progress.style.width = `${30 + 70 * ((i + t) / loadedImgs.length)}%`;
+
+                if (elapsed < totalDur) {
+                    requestAnimationFrame(frame);
+                } else {
+                    resolve();
+                }
             }
-            
-            const item = event.currentTarget;
-            item.classList.toggle('selected');
-            updateSelectionUI();
-        }
-
-        function selectAllVisible() {
-            document.querySelectorAll('.image-item').forEach(item => {
-                const path = item.dataset.path;
-                selectedImages.add(path);
-                item.classList.add('selected');
-            });
-            updateSelectionUI();
-        }
-
-        function clearSelection() {
-            selectedImages.clear();
-            document.querySelectorAll('.image-item.selected').forEach(el => el.classList.remove('selected'));
-            updateSelectionUI();
-        }
-
-        function updateSelectionUI() {
-            const count = selectedImages.size;
-            const bar = document.getElementById('selectionBar');
-            const badge = document.getElementById('selectionBadge');
-
-            bar.classList.toggle('visible', count > 0);
-            document.getElementById('selCount').textContent = `${count} image${count > 1 ? 's' : ''}`;
-            badge.textContent = `${count} sélectionnée${count > 1 ? 's' : ''}`;
-        }
-
-        function exportSelection() {
-            const selected = db.filter(i => selectedImages.has(i.path));
-            const exportData = {
-                total: selected.length,
-                images: selected.map(i => ({
-                    path: i.path,
-                    projet: i.projet,
-                    type: i.type_projet,
-                    phase: i.phase,
-                    elements: i.elements
-                }))
-            };
-
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `selection-video-${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // === LIGHTBOX ===
-        function openLightbox(path) {
-            const lb = document.getElementById('lightbox');
-            document.getElementById('lightboxImg').src = path;
-            lb.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox(event) {
-            if (event && event.target.tagName === 'IMG') return;
-            document.getElementById('lightbox').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeLightbox();
+            requestAnimationFrame(frame);
         });
 
-        // === BOOT ===
-        init();
-    </script>
+        status.textContent = `Rendu image ${i+1}/${loadedImgs.length}…`;
+    }
+
+    // Hold last frame for 1 second
+    await new Promise(r => setTimeout(r, 1000));
+
+    // Outro: fade to black with logo
+    await new Promise(resolve => {
+        const start = performance.now();
+        function frame() {
+            const elapsed = performance.now() - start;
+            const t = Math.min(elapsed / 1500, 1);
+            ctx.fillStyle = `rgba(12,13,18,${t})`;
+            ctx.fillRect(0, 0, W, H);
+
+            if (t > 0.3) {
+                ctx.save();
+                ctx.globalAlpha = Math.min((t - 0.3) / 0.4, 1);
+                ctx.fillStyle = '#F1D835';
+                ctx.font = '700 64px Poppins, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('ETUDERENO', W/2, H/2);
+                ctx.fillStyle = '#888';
+                ctx.font = '300 28px Poppins, sans-serif';
+                ctx.fillText('Rénovation d\'excellence', W/2, H/2 + 50);
+                ctx.restore();
+            }
+
+            if (elapsed < 1500) requestAnimationFrame(frame); else resolve();
+        }
+        requestAnimationFrame(frame);
+    });
+
+    await new Promise(r => setTimeout(r, 500));
+    mediaRecorder.stop();
+}
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+function downloadVideo() {
+    if (!generatedBlob) return;
+    const url = URL.createObjectURL(generatedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `etudereno-video-${Date.now()}.webm`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ============================
+// BOOT
+// ============================
+init();
+</script>
 </body>
 </html>
