@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etudereno — Créateur de Vidéo Chantier</title>
+    <meta name="description" content="Sélectionnez vos images de chantier par projet ou par service pour créer une vidéo de présentation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #F1D835;
+            --primary: #1F2332;
+            --bg-dark: #0f1117;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.18);
+            --text: #e8e8ec;
+            --text-muted: #8b8b9e;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* === BACKGROUND GRADIENT === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(241, 216, 53, 0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(31, 35, 50, 0.4) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(241, 216, 53, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* === HEADER === */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            background: rgba(15, 17, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-back {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-back:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+
+        .header-back.visible {
+            display: flex;
+        }
+
+        .header-badge {
+            padding: 6px 14px;
+            background: rgba(241, 216, 53, 0.1);
+            border: 1px solid rgba(241, 216, 53, 0.2);
+            border-radius: 20px;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* === MAIN CONTAINER === */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* === MODE SELECTOR === */
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto 48px;
+            animation: fadeInUp 0.6s ease-out 0.15s both;
+        }
+
+        .mode-card {
+            position: relative;
+            padding: 40px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(241, 216, 53, 0.08), transparent 60%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .mode-card:hover {
+            border-color: rgba(241, 216, 53, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(241, 216, 53, 0.1);
+        }
+
+        .mode-card:hover::before {
+            opacity: 1;
+        }
+
+        .mode-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(241, 216, 53, 0.15);
+        }
+
+        .mode-icon {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: rgba(241, 216, 53, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .mode-card h2 {
+            position: relative;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .mode-card p {
+            position: relative;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .mode-count {
+            position: relative;
+            margin-top: 14px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* === CONTENT VIEWS === */
+        .content-view {
+            display: none;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .content-view.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        /* === PROJECT / SERVICE GRID === */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-thumb {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover .card-thumb img {
+            transform: scale(1.06);
+        }
+
+        .card-thumb-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px 12px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .phase-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .phase-avant { background: rgba(239, 68, 68, 0.7); }
+        .phase-pendant { background: rgba(245, 158, 11, 0.7); }
+        .phase-après { background: rgba(34, 197, 94, 0.7); }
+
+        .card-info {
+            padding: 16px;
+        }
+
+        .card-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .card-info .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .card-info .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* === SERVICE CARDS (larger icons) === */
+        .service-card .card-thumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(241, 216, 53, 0.06), rgba(31, 35, 50, 0.3));
+        }
+
+        .service-card .card-thumb .service-mosaic {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .service-card .card-thumb .service-mosaic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* === DETAIL VIEW (images for a project/service) === */
+        .detail-header {
+            margin-bottom: 24px;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .detail-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .detail-header .detail-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .detail-stat {
+            padding: 6px 14px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .detail-stat strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .phase-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.4s ease-out 0.1s both;
+        }
+
+        .phase-filter {
+            padding: 8px 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .phase-filter:hover {
+            background: var(--bg-card-hover);
+            color: var(--text);
+        }
+
+        .phase-filter.active {
+            background: rgba(241, 216, 53, 0.15);
+            border-color: rgba(241, 216, 53, 0.3);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            animation: fadeInUp 0.4s ease-out 0.2s both;
+        }
+
+        .image-item {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .image-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .image-item:hover {
+            border-color: rgba(241, 216, 53, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-item.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent), 0 4px 20px rgba(241, 216, 53, 0.2);
+        }
+
+        .image-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .image-item .image-phase {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+        }
+
+        /* === SELECTION BAR === */
+        .selection-bar {
+            position: fixed;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 28px;
+            background: rgba(31, 35, 50, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(241, 216, 53, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 200;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+        }
+
+        .selection-bar.visible {
+            bottom: 24px;
+        }
+
+        .selection-bar .sel-count {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .selection-bar button {
+            padding: 10px 24px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .selection-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(241, 216, 53, 0.3);
+        }
+
+        .selection-bar .sel-clear {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+            font-weight: 400;
+        }
+
+        /* === LIGHTBOX === */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.open {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            cursor: default;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 640px) {
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+
+            .selection-bar {
+                left: 16px;
+                right: 16px;
+                transform: none;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* === LOADING SPINNER === */
+        .loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+        }
+
+        .loader::after {
+            content: '';
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-logo">ETUDERENO</div>
+        <div class="header-nav">
+            <button class="header-back" id="btnBack" onclick="goBack()">← Retour</button>
+            <div class="header-badge" id="selectionBadge">0 sélectionnées</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero" id="heroSection">
+            <h1>Créez votre <span>vidéo de présentation</span></h1>
+            <p>Sélectionnez vos images par projet accompli ou par type de service pour générer une vidéo professionnelle.</p>
+        </section>
+
+        <!-- MODE SELECTOR -->
+        <section class="mode-selector" id="modeSelector">
+            <div class="mode-card" onclick="showView('projects')">
+                <div class="mode-icon">🏗️</div>
+                <h2>Projets</h2>
+                <p>Parcourir par chantier accompli avec les photos avant / pendant / après</p>
+                <div class="mode-count" id="projectCount">—</div>
+            </div>
+            <div class="mode-card" onclick="showView('services')">
+                <div class="mode-icon">🔧</div>
+                <h2>Services</h2>
+                <p>Parcourir par catégorie : salle de bain, cuisine, escalier, etc.</p>
+                <div class="mode-count" id="serviceCount">—</div>
+            </div>
+        </section>
+
+        <!-- PROJECTS VIEW -->
+        <section class="content-view" id="projectsView">
+            <h2 class="section-title">🏗️ <span>Projets accomplis</span></h2>
+            <div class="grid" id="projectsGrid"></div>
+        </section>
+
+        <!-- SERVICES VIEW -->
+        <section class="content-view" id="servicesView">
+            <h2 class="section-title">🔧 <span>Services</span></h2>
+            <div class="grid" id="servicesGrid"></div>
+        </section>
+
+        <!-- DETAIL VIEW -->
+        <section class="content-view" id="detailView">
+            <div class="detail-header" id="detailHeader"></div>
+            <div class="phase-filters" id="phaseFilters"></div>
+            <div class="image-grid" id="imageGrid"></div>
+        </section>
+
+    </div>
+
+    <!-- SELECTION BAR -->
+    <div class="selection-bar" id="selectionBar">
+        <span class="sel-count" id="selCount">0 images</span>
+        <button class="sel-clear" onclick="clearSelection()">Tout désélectionner</button>
+        <button onclick="exportSelection()">📹 Exporter la sélection</button>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        // === STATE ===
+        let db = [];
+        let selectedImages = new Set();
+        let currentView = 'home'; // home | projects | services | detail
+        let viewHistory = [];
+
+        // === INIT ===
+        async function init() {
+            try {
+                const res = await fetch('chantiers_db.json');
+                db = await res.json();
+                updateCounts();
+            } catch (err) {
+                console.error('Erreur chargement base de données:', err);
+            }
+        }
+
+        function updateCounts() {
+            const projects = getProjects();
+            const services = getServices();
+            document.getElementById('projectCount').textContent = `${projects.length} projets`;
+            document.getElementById('serviceCount').textContent = `${services.length} catégories`;
+        }
+
+        // === DATA HELPERS ===
+        function getProjects() {
+            const projectMap = {};
+            db.forEach(item => {
+                const proj = item.projet;
+                if (!proj) return;
+                if (!projectMap[proj]) {
+                    projectMap[proj] = {
+                        name: proj,
+                        images: [],
+                        phases: new Set(),
+                        type: item.type_projet,
+                        style: item.style
+                    };
+                }
+                projectMap[proj].images.push(item);
+                if (item.phase) projectMap[proj].phases.add(item.phase);
+            });
+            return Object.values(projectMap).sort((a, b) => b.images.length - a.images.length);
+        }
+
+        function getServices() {
+            const serviceMap = {};
+            db.forEach(item => {
+                const type = item.type_projet;
+                if (!type) return;
+                if (!serviceMap[type]) {
+                    serviceMap[type] = {
+                        name: type,
+                        label: formatServiceName(type),
+                        images: [],
+                        icon: getServiceIcon(type)
+                    };
+                }
+                serviceMap[type].images.push(item);
+            });
+            return Object.values(serviceMap).sort((a, b) => b.images.length - a.images.length);
+        }
+
+        function formatServiceName(name) {
+            const labels = {
+                'salle_de_bain': 'Salle de Bain',
+                'cuisine': 'Cuisine',
+                'renovation_complete': 'Rénovation Complète',
+                'dressing': 'Dressing & Aménagement',
+                'terrasse': 'Terrasse & Étanchéité',
+                'ipn': 'IPN & Structure',
+                'toile_tendue': 'Toile Tendue',
+                'escalier': 'Escalier',
+                'toilettes': 'Toilettes',
+                'portail': 'Portail',
+                'cheminee': 'Cheminée'
+            };
+            return labels[name] || name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function getServiceIcon(type) {
+            const icons = {
+                'salle_de_bain': '🚿',
+                'cuisine': '🍳',
+                'renovation_complete': '🏠',
+                'dressing': '👔',
+                'terrasse': '🌳',
+                'ipn': '🔩',
+                'toile_tendue': '🎨',
+                'escalier': '🪜',
+                'toilettes': '🚽',
+                'portail': '🚪',
+                'cheminee': '🔥'
+            };
+            return icons[type] || '🔧';
+        }
+
+        function formatProjectName(name) {
+            // Clean up project names for display
+            let clean = name.split('/').pop();
+            clean = clean.replace(/^(Chantier|Projet|SDB)\s*/i, '');
+            return clean || name;
+        }
+
+        function getAfterImage(images) {
+            // Prefer 'après' images for thumbnails
+            const after = images.find(i => i.phase === 'après');
+            if (after) return after;
+            const pendant = images.find(i => i.phase === 'pendant');
+            if (pendant) return pendant;
+            return images[0];
+        }
+
+        // === VIEWS ===
+        function showView(view, data) {
+            viewHistory.push(currentView);
+            currentView = view;
+
+            document.getElementById('modeSelector').style.display = view === 'home' ? 'grid' : 'none';
+            document.getElementById('heroSection').style.display = view === 'home' ? 'block' : 'none';
+            document.getElementById('projectsView').classList.toggle('active', view === 'projects');
+            document.getElementById('servicesView').classList.toggle('active', view === 'services');
+            document.getElementById('detailView').classList.toggle('active', view === 'detail');
+            document.getElementById('btnBack').classList.toggle('visible', view !== 'home');
+
+            if (view === 'projects') renderProjects();
+            if (view === 'services') renderServices();
+            if (view === 'detail') renderDetail(data);
+        }
+
+        function goBack() {
+            const prev = viewHistory.pop();
+            if (!prev || prev === 'home') {
+                currentView = 'home';
+                document.getElementById('modeSelector').style.display = 'grid';
+                document.getElementById('heroSection').style.display = 'block';
+                document.getElementById('projectsView').classList.remove('active');
+                document.getElementById('servicesView').classList.remove('active');
+                document.getElementById('detailView').classList.remove('active');
+                document.getElementById('btnBack').classList.remove('visible');
+            } else {
+                viewHistory.pop(); // Remove extra entry since showView pushes
+                showView(prev);
+            }
+        }
+
+        // === RENDER PROJECTS ===
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const projects = getProjects();
+
+            grid.innerHTML = projects.map(proj => {
+                const thumb = getAfterImage(proj.images);
+                const phases = Array.from(proj.phases).filter(p => p !== 'non_defini');
+                return `
+                    <div class="card" onclick="showView('detail', { type: 'project', key: '${proj.name.replace(/'/g, "\\'")}' })">
+                        <div class="card-thumb">
+                            <img src="${thumb.path}" alt="${proj.name}" loading="lazy">
+                            <div class="card-thumb-overlay">
+                                ${phases.map(p => `<span class="phase-badge phase-${p}">${p}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <h3>${formatProjectName(proj.name)}</h3>
+                            <div class="card-meta">
+                                <span>📷 ${proj.images.length} photos</span>
+                                <span>🏷️ ${formatServiceName(proj.type)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // === RENDER SERVICES ===
+        function renderServices() {
+            const grid = document.getElementById('servicesGrid');
+            const services = getServices();
+
+            grid.innerHTML = services.map(svc => {
+                // Get 4 random 'après' images for mosaic
+                const afterImages = svc.images.filter(i => i.phase === 'après');
+                const mosaicImages = (afterImages.length >= 4 ? afterImages : svc.images).slice(0, 4);
+
+                return `
+                    <div class="card service-card" onclick="showView('detail', { type: 'service', key: '${svc.name}' })">
+                        <div class="card-thumb">
+                            <div class="service-mosaic">
+                                ${mosaicImages.map(img => `<img src="${img.path}" alt="" loading="lazy">`).join('')}
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <h3>${svc.icon} ${svc.label}</h3>
+                            <div class="card-meta">
+                                <span>📷 ${svc.images.length} photos</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // === RENDER DETAIL ===
+        function renderDetail(data) {
+            let images = [];
+            let title = '';
+
+            if (data.type === 'project') {
+                images = db.filter(i => i.projet === data.key);
+                title = formatProjectName(data.key);
+            } else {
+                images = db.filter(i => i.type_projet === data.key);
+                title = `${getServiceIcon(data.key)} ${formatServiceName(data.key)}`;
+            }
+
+            // Header
+            const phases = [...new Set(images.map(i => i.phase).filter(p => p && p !== 'non_defini'))];
+            const elements = [...new Set(images.flatMap(i => i.elements || []))];
+
+            document.getElementById('detailHeader').innerHTML = `
+                <h2>${title}</h2>
+                <div class="detail-stats">
+                    <div class="detail-stat"><strong>${images.length}</strong> photos</div>
+                    ${phases.length ? `<div class="detail-stat"><strong>${phases.length}</strong> phases</div>` : ''}
+                    ${elements.length ? `<div class="detail-stat"><strong>${elements.length}</strong> éléments détectés</div>` : ''}
+                </div>
+            `;
+
+            // Phase filters
+            const filtersContainer = document.getElementById('phaseFilters');
+            filtersContainer.innerHTML = `
+                <button class="phase-filter active" onclick="filterPhase('all', this)">Tout</button>
+                ${phases.map(p => `<button class="phase-filter" onclick="filterPhase('${p}', this)">${p.charAt(0).toUpperCase() + p.slice(1)}</button>`).join('')}
+                <button class="phase-filter" onclick="selectAllVisible()" style="margin-left: auto;">☑ Tout sélectionner</button>
+            `;
+
+            // Images
+            renderImageGrid(images);
+        }
+
+        function renderImageGrid(images, phaseFilter = 'all') {
+            const filtered = phaseFilter === 'all' ? images : images.filter(i => i.phase === phaseFilter);
+            const grid = document.getElementById('imageGrid');
+
+            grid.innerHTML = filtered.map(img => `
+                <div class="image-item ${selectedImages.has(img.path) ? 'selected' : ''}"
+                     data-path="${img.path}"
+                     onclick="toggleImage(event, '${img.path}')"
+                     ondblclick="openLightbox('${img.path}')">
+                    <img src="${img.path}" alt="${img.filename}" loading="lazy">
+                    ${img.phase && img.phase !== 'non_defini' ? `<span class="image-phase phase-badge phase-${img.phase}">${img.phase}</span>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Store current detail data for phase filtering
+        let currentDetailData = null;
+
+        function filterPhase(phase, btn) {
+            document.querySelectorAll('.phase-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const detailView = document.getElementById('detailView');
+            // Determine images from context
+            const headerText = document.getElementById('detailHeader').querySelector('h2').textContent;
+
+            let images = db.filter(i => {
+                // Match by formatted project or service name
+                return i.projet && formatProjectName(i.projet) === headerText ||
+                       i.type_projet && `${getServiceIcon(i.type_projet)} ${formatServiceName(i.type_projet)}` === headerText;
+            });
+
+            if (!images.length) images = db; // fallback
+
+            renderImageGrid(images, phase);
+        }
+
+        // === SELECTION ===
+        function toggleImage(event, path) {
+            event.stopPropagation();
+            if (selectedImages.has(path)) {
+                selectedImages.delete(path);
+            } else {
+                selectedImages.add(path);
+            }
+            
+            const item = event.currentTarget;
+            item.classList.toggle('selected');
+            updateSelectionUI();
+        }
+
+        function selectAllVisible() {
+            document.querySelectorAll('.image-item').forEach(item => {
+                const path = item.dataset.path;
+                selectedImages.add(path);
+                item.classList.add('selected');
+            });
+            updateSelectionUI();
+        }
+
+        function clearSelection() {
+            selectedImages.clear();
+            document.querySelectorAll('.image-item.selected').forEach(el => el.classList.remove('selected'));
+            updateSelectionUI();
+        }
+
+        function updateSelectionUI() {
+            const count = selectedImages.size;
+            const bar = document.getElementById('selectionBar');
+            const badge = document.getElementById('selectionBadge');
+
+            bar.classList.toggle('visible', count > 0);
+            document.getElementById('selCount').textContent = `${count} image${count > 1 ? 's' : ''}`;
+            badge.textContent = `${count} sélectionnée${count > 1 ? 's' : ''}`;
+        }
+
+        function exportSelection() {
+            const selected = db.filter(i => selectedImages.has(i.path));
+            const exportData = {
+                total: selected.length,
+                images: selected.map(i => ({
+                    path: i.path,
+                    projet: i.projet,
+                    type: i.type_projet,
+                    phase: i.phase,
+                    elements: i.elements
+                }))
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `selection-video-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // === LIGHTBOX ===
+        function openLightbox(path) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightboxImg').src = path;
+            lb.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            if (event && event.target.tagName === 'IMG') return;
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // === BOOT ===
+        init();
+    </script>
+</body>
+</html>
