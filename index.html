@@ -281,13 +281,14 @@ let currentListMode = null;   // 'projects' | 'services'
 let selectedTarget = null;    // { type, key, label, images }
 let generatedBlob = null;
 
-// ============================
-// INIT
-// ============================
-async function init() {
-    const res = await fetch('chantiers_db.json');
-    db = await res.json();
-    document.getElementById('cntProjects').textContent = `${getProjects().length} projets`;
+        // === INIT ===
+        async function init() {
+            try {
+                // Add timestamp to prevent browser caching old paths
+                const ts = new Date().getTime();
+                const res = await fetch(`chantiers_db.json?t=${ts}`);
+                db = await res.json();
+                document.getElementById('cntProjects').textContent = `${getProjects().length} projets`;
     document.getElementById('cntServices').textContent = `${getServices().length} catégories`;
 }
 
