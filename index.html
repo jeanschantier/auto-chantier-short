@@ -813,21 +813,46 @@ async function generateVideo(images, theme) {
                     ctx.fillRect(0, 0, W, H);
                 }
 
-                // Phase label
-                if (imgData.phase && imgData.phase !== 'non_defini') {
-                    const label = imgData.phase.toUpperCase();
-                    const colors = { AVANT: '#ef4444', PENDANT: '#f59e0b', 'APRÈS': '#22c55e' };
-                    ctx.save();
-                    ctx.fillStyle = colors[label] || '#888';
-                    const pillW = ctx.measureText ? 180 : 180;
-                    roundRect(ctx, 40, H - 120, pillW, 50, 12);
-                    ctx.fill();
-                    ctx.fillStyle = '#fff';
+                // Project description label (animated like Le Parisien)
+                const projectText = target.label.toUpperCase();
+                const phaseText = imgData.phase && imgData.phase !== 'non_defini' ? imgData.phase.toUpperCase() : '';
+                
+                ctx.save();
+                // Slide in animation (ease out)
+                const textAnimT = Math.min(elapsed / 600, 1); 
+                const easeOut = 1 - Math.pow(1 - textAnimT, 3);
+                
+                const boxX = 40;
+                const boxY = H - 200 + 50 * (1 - easeOut);
+                
+                ctx.globalAlpha = Math.max(0, easeOut);
+                
+                ctx.font = '800 36px Poppins, sans-serif';
+                const padding = 20;
+                // Fallback width if measureText isn't fully accurate, but canvas API supports it
+                const textW = ctx.measureText(projectText).width;
+                
+                // Draw Yellow Box
+                ctx.fillStyle = '#F1D835';
+                ctx.fillRect(boxX, boxY, textW + padding * 2, 60);
+                
+                // Draw Text
+                ctx.fillStyle = '#1F2332';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+                ctx.fillText(projectText, boxX + padding, boxY + 12);
+                
+                // Phase Sub-box (White)
+                if (phaseText) {
                     ctx.font = '600 28px Poppins, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(label, 40 + pillW/2, H - 87);
-                    ctx.restore();
+                    const phaseW = ctx.measureText(phaseText).width;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(boxX, boxY + 60, phaseW + padding * 2, 45);
+                    ctx.fillStyle = '#1F2332';
+                    ctx.fillText(phaseText, boxX + padding, boxY + 60 + 8);
                 }
+                
+                ctx.restore();
 
                 // Progress overlay
                 const progY = H - 20;
@@ -841,9 +866,7 @@ async function generateVideo(images, theme) {
                     ctx.save();
                     const logoW = 240;
                     const logoH = logoImg.height * (logoW / logoImg.width);
-                    ctx.shadowColor = 'rgba(0,0,0,0.6)';
-                    ctx.shadowBlur = 12;
-                    ctx.globalAlpha = 0.85;
+                    ctx.globalAlpha = 1.0;
                     ctx.drawImage(logoImg, W - logoW - 40, 40, logoW, logoH);
                     ctx.restore();
                 }
@@ -866,62 +889,7 @@ async function generateVideo(images, theme) {
     // Hold last frame for 1 second
     await new Promise(r => setTimeout(r, 1000));
 
-    // OUTRO SEQUENCE (3 seconds)
-    status.textContent = 'Génération de la séquence de fin…';
-    const OUTRO_DURATION = 3000;
-    const outroStart = performance.now();
-    await new Promise(resolve => {
-        function outroFrame() {
-            const elapsed = performance.now() - outroStart;
-            const t = Math.min(elapsed / OUTRO_DURATION, 1);
-            
-            // Background (#1F2332)
-            ctx.fillStyle = '#1F2332';
-            ctx.fillRect(0, 0, W, H);
-            
-            // Draw logo centered
-            if (logoImg) {
-                const logoW = 550;
-                const logoH = logoImg.height * (logoW / logoImg.width);
-                // Slight fade in and scale up
-                const animT = Math.min(elapsed / 1000, 1);
-                ctx.save();
-                ctx.globalAlpha = animT;
-                const scale = 0.95 + 0.05 * animT;
-                ctx.translate(W/2, H/2 - 120);
-                ctx.scale(scale, scale);
-                ctx.drawImage(logoImg, -logoW/2, -logoH/2, logoW, logoH);
-                ctx.restore();
-            }
-            
-            // Text fade in
-            const textT = Math.min(Math.max((elapsed - 800) / 1000, 0), 1);
-            if (textT > 0) {
-                ctx.save();
-                ctx.globalAlpha = textT;
-                
-                // Tagline
-                ctx.fillStyle = '#F1D835';
-                ctx.font = '600 48px Poppins, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText("Votre projet commence ici.", W/2, H/2 + 100);
-                
-                // URL
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '300 36px Poppins, sans-serif';
-                ctx.fillText("www.etudereno.fr", W/2, H/2 + 170);
-                
-                ctx.restore();
-            }
-            
-            if (elapsed < OUTRO_DURATION) {
-                requestAnimationFrame(outroFrame);
-            } else {
-                resolve();
-            }
-        }
-        requestAnimationFrame(outroFrame);
-    });
+    // Generate end hold frame without outro
 
     mediaRecorder.stop();
 }
