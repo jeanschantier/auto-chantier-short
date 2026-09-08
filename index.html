@@ -732,6 +732,14 @@ async function generateVideo(images, theme) {
         return;
     }
 
+    // Preload logo
+    let logoImg = null;
+    try {
+        logoImg = await loadImage('images/logo.png');
+    } catch(e) {
+        console.warn('Failed to load logo');
+    }
+
     status.textContent = 'Génération de la vidéo…';
     progress.style.width = '30%';
 
@@ -828,6 +836,18 @@ async function generateVideo(images, theme) {
                 ctx.fillStyle = '#F1D835';
                 ctx.fillRect(0, progY, W * ((i + t) / loadedImgs.length), 8);
 
+                // Watermark Logo (Top Right)
+                if (logoImg) {
+                    ctx.save();
+                    const logoW = 240;
+                    const logoH = logoImg.height * (logoW / logoImg.width);
+                    ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                    ctx.shadowBlur = 12;
+                    ctx.globalAlpha = 0.85;
+                    ctx.drawImage(logoImg, W - logoW - 40, 40, logoW, logoH);
+                    ctx.restore();
+                }
+
                 // Update external progress
                 progress.style.width = `${30 + 70 * ((i + t) / loadedImgs.length)}%`;
 
@@ -846,34 +866,63 @@ async function generateVideo(images, theme) {
     // Hold last frame for 1 second
     await new Promise(r => setTimeout(r, 1000));
 
-    // Outro: fade to black with logo
+    // OUTRO SEQUENCE (3 seconds)
+    status.textContent = 'Génération de la séquence de fin…';
+    const OUTRO_DURATION = 3000;
+    const outroStart = performance.now();
     await new Promise(resolve => {
-        const start = performance.now();
-        function frame() {
-            const elapsed = performance.now() - start;
-            const t = Math.min(elapsed / 1500, 1);
-            ctx.fillStyle = `rgba(12,13,18,${t})`;
+        function outroFrame() {
+            const elapsed = performance.now() - outroStart;
+            const t = Math.min(elapsed / OUTRO_DURATION, 1);
+            
+            // Background (#1F2332)
+            ctx.fillStyle = '#1F2332';
             ctx.fillRect(0, 0, W, H);
-
-            if (t > 0.3) {
+            
+            // Draw logo centered
+            if (logoImg) {
+                const logoW = 550;
+                const logoH = logoImg.height * (logoW / logoImg.width);
+                // Slight fade in and scale up
+                const animT = Math.min(elapsed / 1000, 1);
                 ctx.save();
-                ctx.globalAlpha = Math.min((t - 0.3) / 0.4, 1);
-                ctx.fillStyle = '#F1D835';
-                ctx.font = '700 64px Poppins, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('ETUDERENO', W/2, H/2);
-                ctx.fillStyle = '#888';
-                ctx.font = '300 28px Poppins, sans-serif';
-                ctx.fillText('Rénovation d\'excellence', W/2, H/2 + 50);
+                ctx.globalAlpha = animT;
+                const scale = 0.95 + 0.05 * animT;
+                ctx.translate(W/2, H/2 - 120);
+                ctx.scale(scale, scale);
+                ctx.drawImage(logoImg, -logoW/2, -logoH/2, logoW, logoH);
                 ctx.restore();
             }
-
-            if (elapsed < 1500) requestAnimationFrame(frame); else resolve();
+            
+            // Text fade in
+            const textT = Math.min(Math.max((elapsed - 800) / 1000, 0), 1);
+            if (textT > 0) {
+                ctx.save();
+                ctx.globalAlpha = textT;
+                
+                // Tagline
+                ctx.fillStyle = '#F1D835';
+                ctx.font = '600 48px Poppins, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText("Votre projet commence ici.", W/2, H/2 + 100);
+                
+                // URL
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '300 36px Poppins, sans-serif';
+                ctx.fillText("www.etudereno.fr", W/2, H/2 + 170);
+                
+                ctx.restore();
+            }
+            
+            if (elapsed < OUTRO_DURATION) {
+                requestAnimationFrame(outroFrame);
+            } else {
+                resolve();
+            }
         }
-        requestAnimationFrame(frame);
+        requestAnimationFrame(outroFrame);
     });
 
-    await new Promise(r => setTimeout(r, 500));
     mediaRecorder.stop();
 }
 
