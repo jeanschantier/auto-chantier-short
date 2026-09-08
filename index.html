@@ -7,7 +7,7 @@
     <meta name="description" content="Générez automatiquement des vidéos de présentation à partir de vos photos de chantier.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -384,6 +384,54 @@ function svcIcon(t) {
 function fmtProject(n) {
     let c = n.split('/').pop();
     return c.replace(/^(Chantier|Projet|SDB)\s*/i, '') || n;
+}
+
+function fitCanvasText(ctx, text, maxWidth, maxLines = 3, startFontSize = 64) {
+    let fontSize = startFontSize;
+    let lines = [];
+    let lineHeight = 0;
+
+    while (fontSize >= 26) {
+        ctx.font = `800 ${fontSize}px Poppins, sans-serif`;
+        lineHeight = Math.round(fontSize * 1.18);
+        lines = [];
+        const words = text.split(' ').filter(w => w.length > 0);
+        let currentLine = '';
+        let fits = true;
+
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const testLine = currentLine ? (currentLine + ' ' + word) : word;
+            const testWidth = ctx.measureText(testLine).width;
+
+            if (testWidth > maxWidth) {
+                if (currentLine) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                    if (ctx.measureText(word).width > maxWidth) {
+                        fits = false;
+                        break;
+                    }
+                } else {
+                    fits = false;
+                    break;
+                }
+            } else {
+                currentLine = testLine;
+            }
+        }
+        if (currentLine && fits) {
+            lines.push(currentLine);
+        }
+
+        if (fits && lines.length <= maxLines) {
+            break;
+        }
+
+        fontSize -= 3;
+    }
+
+    return { lines, fontSize, lineHeight };
 }
 
 function bestThumb(imgs) {
@@ -814,72 +862,76 @@ async function generateVideo(images, theme, target) {
                 }
 
                 // Project description label (animated like Le Parisien)
-                let formattedLabel = target.label.replace(/-/g, ' ').replace(/^projet /i, '');
-                // Capitalize first letters for better aesthetics
+                let formattedLabel = (target.label || '')
+                    .replace(/[-_]/g, ' ')
+                    .replace(/^projet /i, '')
+                    .replace(/^sdb /i, 'SDB ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
                 formattedLabel = formattedLabel.replace(/\b\w/g, l => l.toUpperCase());
+                
                 const projectText = formattedLabel;
-                const phaseText = imgData.phase && imgData.phase !== 'non_defini' ? "Phase " + imgData.phase : '';
+                const phaseText = (imgData.phase && imgData.phase !== 'non_defini') ? ("Phase " + imgData.phase) : '';
                 
                 ctx.save();
                 
-                // Draw a subtle dark gradient at the bottom to make white text readable
-                const grad = ctx.createLinearGradient(0, H - 400, 0, H);
+                const paddingX = 60;
+                const maxWidth = W - paddingX * 2;
+                
+                // Fit text dynamically to max 3 lines & max width
+                const { lines, fontSize, lineHeight } = fitCanvasText(ctx, projectText, maxWidth, 3, 64);
+                
+                const phaseFontSize = 26;
+                const phaseHeight = phaseText ? (phaseFontSize + 14) : 0;
+                const projectHeight = lines.length * lineHeight;
+                const totalTextHeight = phaseHeight + projectHeight;
+                
+                const bottomMargin = 75; // distance above bottom progress bar
+                const baseY = H - bottomMargin - totalTextHeight;
+
+                // Dynamic dark gradient overlay behind text
+                const gradStart = Math.max(0, baseY - 90);
+                const grad = ctx.createLinearGradient(0, gradStart, 0, H);
                 grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+                grad.addColorStop(0.35, 'rgba(0,0,0,0.65)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.94)');
                 ctx.fillStyle = grad;
-                ctx.fillRect(0, H - 400, W, 400);
+                ctx.fillRect(0, gradStart, W, H - gradStart);
 
                 // Slide in animation from bottom
                 const textAnimT = Math.min(elapsed / 600, 1); 
                 const easeOut = 1 - Math.pow(1 - textAnimT, 3);
                 
-                const paddingX = 50;
-                // animate Y from slightly below
-                const currentY = H - 240 + 30 * (1 - easeOut);
+                const currentBaseY = baseY + 35 * (1 - easeOut);
                 
                 ctx.globalAlpha = Math.max(0, easeOut);
                 
                 // Text Shadows for readability
-                ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                ctx.shadowBlur = 6;
+                ctx.shadowColor = 'rgba(0,0,0,0.85)';
+                ctx.shadowBlur = 8;
                 ctx.shadowOffsetX = 2;
                 ctx.shadowOffsetY = 2;
                 
-                // Phase Subtitle (Kicker)
-                let yOffset = 0;
+                // 1. Phase Subtitle (Kicker in yellow accent)
                 if (phaseText) {
-                    ctx.font = '700 32px Poppins, sans-serif';
-                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `700 ${phaseFontSize}px Poppins, sans-serif`;
+                    ctx.fillStyle = '#F1D835';
                     ctx.textAlign = 'left';
-                    ctx.textBaseline = 'bottom';
-                    ctx.fillText(phaseText.toUpperCase(), paddingX, currentY);
-                    yOffset = 15;
+                    ctx.textBaseline = 'top';
+                    ctx.fillText(phaseText.toUpperCase(), paddingX, currentBaseY);
                 }
                 
-                // Project Text (Headline)
-                ctx.font = '800 68px Poppins, sans-serif';
+                // 2. Project Headline (White bold text)
+                ctx.font = `800 ${fontSize}px Poppins, sans-serif`;
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'top';
                 
-                const maxWidth = W - paddingX * 2;
-                const words = projectText.split(' ');
-                let line = '';
-                let drawY = currentY + yOffset;
-                
-                for(let n = 0; n < words.length; n++) {
-                    let testLine = line + words[n] + ' ';
-                    let metrics = ctx.measureText(testLine);
-                    if (metrics.width > maxWidth && n > 0) {
-                        ctx.fillText(line, paddingX, drawY);
-                        line = words[n] + ' ';
-                        drawY += 75; // line height
-                    }
-                    else {
-                        line = testLine;
-                    }
+                let lineDrawY = currentBaseY + phaseHeight;
+                for (let l = 0; l < lines.length; l++) {
+                    ctx.fillText(lines[l], paddingX, lineDrawY);
+                    lineDrawY += lineHeight;
                 }
-                ctx.fillText(line, paddingX, drawY);
                 
                 ctx.restore();
 
