@@ -814,43 +814,69 @@ async function generateVideo(images, theme, target) {
                 }
 
                 // Project description label (animated like Le Parisien)
-                const projectText = target.label.toUpperCase();
-                const phaseText = imgData.phase && imgData.phase !== 'non_defini' ? imgData.phase.toUpperCase() : '';
+                const projectText = target.label;
+                const phaseText = imgData.phase && imgData.phase !== 'non_defini' ? "Phase " + imgData.phase : '';
                 
                 ctx.save();
-                // Slide in animation (ease out)
+                
+                // Draw a subtle dark gradient at the bottom to make white text readable
+                const grad = ctx.createLinearGradient(0, H - 400, 0, H);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, H - 400, W, 400);
+
+                // Slide in animation from bottom
                 const textAnimT = Math.min(elapsed / 600, 1); 
                 const easeOut = 1 - Math.pow(1 - textAnimT, 3);
                 
-                const boxX = 40;
-                const boxY = H - 200 + 50 * (1 - easeOut);
+                const paddingX = 50;
+                // animate Y from slightly below
+                const currentY = H - 240 + 30 * (1 - easeOut);
                 
                 ctx.globalAlpha = Math.max(0, easeOut);
                 
-                ctx.font = '800 36px Poppins, sans-serif';
-                const padding = 20;
-                // Fallback width if measureText isn't fully accurate, but canvas API supports it
-                const textW = ctx.measureText(projectText).width;
+                // Text Shadows for readability
+                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                ctx.shadowBlur = 6;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
                 
-                // Draw Yellow Box
-                ctx.fillStyle = '#F1D835';
-                ctx.fillRect(boxX, boxY, textW + padding * 2, 60);
+                // Phase Subtitle (Kicker)
+                let yOffset = 0;
+                if (phaseText) {
+                    ctx.font = '700 32px Poppins, sans-serif';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText(phaseText.toUpperCase(), paddingX, currentY);
+                    yOffset = 15;
+                }
                 
-                // Draw Text
-                ctx.fillStyle = '#1F2332';
+                // Project Text (Headline)
+                ctx.font = '800 68px Poppins, sans-serif';
+                ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'top';
-                ctx.fillText(projectText, boxX + padding, boxY + 12);
                 
-                // Phase Sub-box (White)
-                if (phaseText) {
-                    ctx.font = '600 28px Poppins, sans-serif';
-                    const phaseW = ctx.measureText(phaseText).width;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(boxX, boxY + 60, phaseW + padding * 2, 45);
-                    ctx.fillStyle = '#1F2332';
-                    ctx.fillText(phaseText, boxX + padding, boxY + 60 + 8);
+                const maxWidth = W - paddingX * 2;
+                const words = projectText.split(' ');
+                let line = '';
+                let drawY = currentY + yOffset;
+                
+                for(let n = 0; n < words.length; n++) {
+                    let testLine = line + words[n] + ' ';
+                    let metrics = ctx.measureText(testLine);
+                    if (metrics.width > maxWidth && n > 0) {
+                        ctx.fillText(line, paddingX, drawY);
+                        line = words[n] + ' ';
+                        drawY += 75; // line height
+                    }
+                    else {
+                        line = testLine;
+                    }
                 }
+                ctx.fillText(line, paddingX, drawY);
                 
                 ctx.restore();
 
