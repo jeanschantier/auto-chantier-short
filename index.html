@@ -814,7 +814,10 @@ async function generateVideo(images, theme, target) {
                 }
 
                 // Project description label (animated like Le Parisien)
-                const projectText = target.label;
+                let formattedLabel = target.label.replace(/-/g, ' ').replace(/^projet /i, '');
+                // Capitalize first letters for better aesthetics
+                formattedLabel = formattedLabel.replace(/\b\w/g, l => l.toUpperCase());
+                const projectText = formattedLabel;
                 const phaseText = imgData.phase && imgData.phase !== 'non_defini' ? "Phase " + imgData.phase : '';
                 
                 ctx.save();
