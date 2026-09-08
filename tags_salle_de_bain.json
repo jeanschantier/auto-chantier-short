@@ -1,0 +1,364 @@
+{
+  "salle de bain/l'hay les roses": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "douche",
+      "receveur_plat",
+      "paroi_douche",
+      "colonne_douche",
+      "pommeau",
+      "carrelage_mural",
+      "meuble_vasque",
+      "tapis"
+    ],
+    "materiaux": [
+      "verre",
+      "chrome",
+      "noir_mat",
+      "ceramique",
+      "gres_cerame",
+      "marbre"
+    ],
+    "couleurs_dominantes": [
+      "beige",
+      "taupe",
+      "blanc",
+      "rose"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/Paris 16 douche": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "douche",
+      "paroi_douche",
+      "colonne_douche",
+      "pommeau",
+      "caniveau_lineaire",
+      "carrelage_mural",
+      "vasque",
+      "plan_travail"
+    ],
+    "materiaux": [
+      "verre",
+      "chrome",
+      "noir_mat",
+      "ceramique",
+      "gres_cerame",
+      "pierre"
+    ],
+    "couleurs_dominantes": [
+      "noir",
+      "blanc",
+      "gris"
+    ],
+    "style": "contemporain",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/Projet SDB Chartres Mme M Morio Juillet 2025": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "douche",
+      "paroi_douche",
+      "colonne_douche",
+      "pommeau",
+      "meuble_vasque",
+      "lavabo",
+      "miroir",
+      "spot",
+      "carrelage_mural",
+      "seche_serviette",
+      "fenetre"
+    ],
+    "materiaux": [
+      "verre",
+      "chrome",
+      "ceramique",
+      "gres_cerame",
+      "bois"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "beige",
+      "gris"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/Projet SDB Massy juin 2025": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "plan_travail",
+      "vasque",
+      "mitigeur",
+      "miroir",
+      "carrelage_sol",
+      "credence",
+      "tiroir"
+    ],
+    "materiaux": [
+      "bois",
+      "ceramique",
+      "chrome",
+      "laiton",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "bois",
+      "beige",
+      "taupe"
+    ],
+    "style": "scandinave",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/SDB Bezons": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "lavabo",
+      "mitigeur",
+      "miroir",
+      "placard",
+      "mosaique",
+      "carrelage_sol"
+    ],
+    "materiaux": [
+      "ceramique",
+      "chrome",
+      "verre",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "beige",
+      "blanc"
+    ],
+    "style": "classique",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/SDB Meudon": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "vasque",
+      "miroir",
+      "wc",
+      "bidet",
+      "douche",
+      "paroi_douche",
+      "carrelage_mural",
+      "carrelage_sol",
+      "seche_serviette",
+      "spot",
+      "lave_vaisselle"
+    ],
+    "materiaux": [
+      "bois",
+      "ceramique",
+      "verre",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "bleu",
+      "blanc",
+      "bois",
+      "marron",
+      "gris"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/SDB Mme M Duda Saint Rémy les Chevreuse août 2025": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "douche",
+      "paroi_douche",
+      "colonne_douche",
+      "pommeau",
+      "meuble_vasque",
+      "lavabo",
+      "mitigeur",
+      "carrelage_mural",
+      "carrelage_sol",
+      "fenetre"
+    ],
+    "materiaux": [
+      "verre",
+      "chrome",
+      "ceramique",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "beige",
+      "blanc",
+      "pierre"
+    ],
+    "style": "classique",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/SDB Noisy Mme M Watrin juillet 2025": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "lavabo",
+      "mitigeur",
+      "miroir",
+      "douche",
+      "receveur_plat",
+      "colonne_douche",
+      "pommeau",
+      "carrelage_mural",
+      "carrelage_sol",
+      "spot",
+      "placard"
+    ],
+    "materiaux": [
+      "bois",
+      "ceramique",
+      "noir_mat",
+      "verre",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "bois",
+      "blanc",
+      "beige",
+      "gris"
+    ],
+    "style": "contemporain",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/SDB nakachian paris 16": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "lavabo",
+      "mitigeur",
+      "miroir",
+      "luminaire",
+      "douche",
+      "receveur_plat",
+      "paroi_douche",
+      "mosaique"
+    ],
+    "materiaux": [
+      "ceramique",
+      "chrome",
+      "verre",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "beige",
+      "blanc",
+      "taupe"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/Salle de bain Jawad Montigny": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "baignoire",
+      "mitigeur",
+      "wc",
+      "meuble_vasque",
+      "vasque",
+      "miroir",
+      "carrelage_mural",
+      "carrelage_sol",
+      "peinture",
+      "seche_serviette"
+    ],
+    "materiaux": [
+      "ceramique",
+      "chrome",
+      "bois",
+      "verre",
+      "laiton"
+    ],
+    "couleurs_dominantes": [
+      "orange",
+      "terracotta",
+      "blanc",
+      "bois"
+    ],
+    "style": "contemporain",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/paris 17": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "mitigeur",
+      "carrelage_mural",
+      "plan_travail"
+    ],
+    "materiaux": [
+      "laiton",
+      "ceramique"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "laiton",
+      "noir"
+    ],
+    "style": "rustique",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/salle de bain à Versailles...": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "douche",
+      "receveur_plat",
+      "paroi_douche",
+      "colonne_douche",
+      "pommeau",
+      "meuble_vasque",
+      "lavabo",
+      "miroir",
+      "etagere",
+      "carrelage_mural"
+    ],
+    "materiaux": [
+      "ceramique",
+      "chrome",
+      "verre"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "beige"
+    ],
+    "style": "classique",
+    "qualite_finition": "fini"
+  },
+  "salle de bain/studio Heimer": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "meuble_vasque",
+      "vasque",
+      "mitigeur",
+      "miroir",
+      "douche",
+      "receveur_plat",
+      "paroi_douche",
+      "carrelage_mural",
+      "carrelage_sol"
+    ],
+    "materiaux": [
+      "bois",
+      "ceramique",
+      "chrome",
+      "verre",
+      "gres_cerame"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "bois",
+      "vert",
+      "gris"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  }
+}

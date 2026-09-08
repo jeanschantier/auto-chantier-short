@@ -1,0 +1,82 @@
+{
+  "cuisine/cuisine Le Pecq": {
+    "type_projet": "cuisine",
+    "elements": ["evier", "mitigeur", "plan_travail", "placard", "tiroir", "plaque_cuisson", "credence", "luminaire", "interrupteur"],
+    "materiaux": ["bois", "resine", "verre"],
+    "couleurs_dominantes": ["vert", "bois", "beige", "gris clair"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "cuisine/Projet cuisine Baron": {
+    "type_projet": "cuisine",
+    "elements": ["evier", "mitigeur", "plan_travail", "placard", "tiroir", "plaque_cuisson", "hotte", "credence", "prise", "carrelage_sol"],
+    "materiaux": ["bois", "verre", "composite", "metal"],
+    "couleurs_dominantes": ["vert", "bois", "noir"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Paris 16": {
+    "type_projet": "renovation_complete",
+    "elements": ["parquet", "luminaire", "peinture", "fenetre", "volet"],
+    "materiaux": ["bois", "verre", "tissu"],
+    "couleurs_dominantes": ["rouge", "bois", "blanc"],
+    "style": "classique",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/surenes": {
+    "type_projet": "salle_de_bain",
+    "elements": ["wc", "lavabo", "mitigeur", "douche", "paroi_douche", "seche_serviette", "carrelage_sol", "faience", "miroir"],
+    "materiaux": ["bois", "laiton", "ceramique", "verre", "gres_cerame"],
+    "couleurs_dominantes": ["blanc", "bois", "beige", "or"],
+    "style": "contemporain",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Chantier Jawad montingy/Cheminé Jawad Montigny": {
+    "type_projet": "cheminee",
+    "elements": ["cheminee", "parquet", "peinture"],
+    "materiaux": ["bois", "verre", "metal", "pierre"],
+    "couleurs_dominantes": ["blanc", "noir", "bois"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Chantier Jawad montingy/Cuisine Jawad Montigny": {
+    "type_projet": "cuisine",
+    "elements": ["plan_travail", "placard", "plaque_cuisson", "four", "evier", "mitigeur", "luminaire", "interrupteur", "fenetre", "porte", "parquet"],
+    "materiaux": ["bois", "verre", "metal"],
+    "couleurs_dominantes": ["blanc", "bois", "noir"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Chantier Jawad montingy/Toilette Jawad Montigny": {
+    "type_projet": "salle_de_bain",
+    "elements": ["wc", "meuble_vasque", "lavabo", "mitigeur", "douche", "paroi_douche", "carrelage_sol", "faience", "colonne_douche", "pommeau", "bonde", "spot"],
+    "materiaux": ["ceramique", "verre", "chrome", "metal"],
+    "couleurs_dominantes": ["blanc", "bleu", "gris"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Projet Noisy-le-Grand - aménagement sous escalier et cuisine en cours": {
+    "type_projet": "cuisine",
+    "elements": ["plan_travail", "placard", "evier", "plaque_cuisson", "four", "lave_vaisselle", "carrelage_sol", "credence"],
+    "materiaux": ["bois", "ceramique", "metal", "verre"],
+    "couleurs_dominantes": ["blanc", "bois"],
+    "style": "contemporain",
+    "qualite_finition": "semi_fini"
+  },
+  "renovation complete/Extension et création de 2 niveaux pour dressing et sanitaire Hausmanien Paris 4 hôtel de ville": {
+    "type_projet": "dressing",
+    "elements": ["etagere", "porte", "fenetre", "parquet"],
+    "materiaux": ["bois"],
+    "couleurs_dominantes": ["blanc", "bois"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "renovation complete/Chantier Bondoufle": {
+    "type_projet": "salle_de_bain",
+    "elements": ["vasque", "meuble_vasque", "mitigeur", "miroir", "faience", "prise", "porte"],
+    "materiaux": ["ceramique", "bois", "noir_mat", "verre"],
+    "couleurs_dominantes": ["blanc", "bois", "gris", "marbre"],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  }
+}

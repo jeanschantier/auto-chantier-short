@@ -1,0 +1,177 @@
+{
+  "autre/portail chêne rochechouart": {
+    "type_projet": "portail",
+    "elements": [
+      "portail",
+      "cloture"
+    ],
+    "materiaux": [
+      "metal",
+      "acier"
+    ],
+    "couleurs_dominantes": [
+      "vert",
+      "blanc"
+    ],
+    "style": "classique",
+    "qualite_finition": "fini"
+  },
+  "autre/Travaux en cours, étanchéité terrasse bois Darcy, manque le carrelage de sol": {
+    "type_projet": "terrasse",
+    "elements": [
+      "terrasse_bois",
+      "etancheite",
+      "ciment",
+      "balustrade"
+    ],
+    "materiaux": [
+      "beton",
+      "pvc",
+      "pierre"
+    ],
+    "couleurs_dominantes": [
+      "orange",
+      "gris",
+      "beige"
+    ],
+    "style": "moderne",
+    "qualite_finition": "en_cours"
+  },
+  "autre/17e projet « Printemps »": {
+    "type_projet": "renovation_complete",
+    "elements": [
+      "parquet",
+      "lino",
+      "placo",
+      "fenetre"
+    ],
+    "materiaux": [
+      "bois",
+      "platre",
+      "ciment"
+    ],
+    "couleurs_dominantes": [
+      "bois_naturel",
+      "gris",
+      "blanc"
+    ],
+    "style": "moderne",
+    "qualite_finition": "en_cours"
+  },
+  "autre/IPN Meudon": {
+    "type_projet": "ipn",
+    "elements": [
+      "ipn",
+      "placo",
+      "enduit",
+      "carrelage_sol",
+      "radiateur",
+      "fenetre"
+    ],
+    "materiaux": [
+      "platre",
+      "ceramique",
+      "acier"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "beige"
+    ],
+    "style": "moderne",
+    "qualite_finition": "en_cours"
+  },
+  "autre/paris 6 toile tendu": {
+    "type_projet": "toile_tendue",
+    "elements": [
+      "toile_tendue",
+      "porte",
+      "luminaire",
+      "parquet",
+      "interrupteur",
+      "prise"
+    ],
+    "materiaux": [
+      "bois",
+      "tissu",
+      "platre"
+    ],
+    "couleurs_dominantes": [
+      "blanc",
+      "bleu",
+      "gris"
+    ],
+    "style": "haussmannien",
+    "qualite_finition": "fini"
+  },
+  "autre/Escalier Les Clayes-sous-Bois": {
+    "type_projet": "escalier",
+    "elements": [
+      "escalier",
+      "etagere",
+      "placard"
+    ],
+    "materiaux": [
+      "bois"
+    ],
+    "couleurs_dominantes": [
+      "bois_naturel",
+      "blanc"
+    ],
+    "style": "scandinave",
+    "qualite_finition": "fini"
+  },
+  "autre/Rambouillet": {
+    "type_projet": "toilettes",
+    "elements": [
+      "wc",
+      "placard",
+      "carrelage_mural",
+      "faience",
+      "peinture"
+    ],
+    "materiaux": [
+      "ceramique",
+      "bois"
+    ],
+    "couleurs_dominantes": [
+      "jaune",
+      "blanc"
+    ],
+    "style": "moderne",
+    "qualite_finition": "fini"
+  },
+  "image pinterest": {
+    "type_projet": "salle_de_bain",
+    "elements": [
+      "vasque",
+      "meuble_vasque",
+      "miroir",
+      "robinet",
+      "mitigeur",
+      "carrelage_mural",
+      "faience",
+      "spot",
+      "porte",
+      "evier",
+      "plan_travail",
+      "placard",
+      "tiroir",
+      "etagere",
+      "credence"
+    ],
+    "materiaux": [
+      "bois",
+      "ceramique",
+      "laiton",
+      "pierre",
+      "metal"
+    ],
+    "couleurs_dominantes": [
+      "beige",
+      "bois_naturel",
+      "blanc"
+    ],
+    "style": "contemporain",
+    "qualite_finition": "professionnel"
+  }
+}
