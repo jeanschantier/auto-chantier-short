@@ -144,6 +144,31 @@
         .theme-header p { color: var(--text-muted); font-weight: 300; font-size: 0.9rem; }
         .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; max-width: 900px; margin: 0 auto; }
 
+        /* === SELECTION GRID === */
+        .sel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; margin-bottom: 30px; }
+        .sel-card {
+            position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; border: 2px solid transparent;
+            transition: all 0.2s; aspect-ratio: 1; background: #000;
+        }
+        .sel-card img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.2s; }
+        .sel-card.excluded { border-color: rgba(239,68,68,0.5); }
+        .sel-card.excluded img { opacity: 0.25; }
+        .sel-check {
+            position: absolute; top: 6px; right: 6px; background: var(--accent); color: #000;
+            width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 12px; transition: 0.2s;
+        }
+        .sel-card.excluded .sel-check { background: rgba(239,68,68,0.9); color: white; content: '✕'; }
+        .sel-card.excluded .sel-check::after { content: '✕'; }
+        .sel-card:not(.excluded) .sel-check::after { content: '✓'; font-weight: bold; }
+        
+        .sticky-footer {
+            position: sticky; bottom: 20px; background: rgba(31,35,50,0.95); backdrop-filter: blur(10px);
+            padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 10; margin-top: 40px;
+        }
+
         .theme-card {
             padding: 28px 24px; background: var(--bg-card); border: 1px solid var(--border);
             border-radius: var(--radius); cursor: pointer; transition: all 0.35s var(--ease);
@@ -260,6 +285,19 @@
         <div class="theme-grid" id="subcatGrid"></div>
     </div>
 
+    <!-- SCREEN 3.8: MANUAL SELECTION -->
+    <div class="screen" id="screenSelection">
+        <div class="theme-header">
+            <h2>Vérification des photos</h2>
+            <p>Décochez les photos qui ne correspondent pas avant de générer la vidéo.</p>
+        </div>
+        <div class="sel-grid" id="selGrid"></div>
+        <div class="sticky-footer">
+            <span id="selCountText" style="font-weight:300; font-size:0.9rem;"></span>
+            <button class="btn btn-primary" onclick="confirmSelectionAndGenerate()">Générer la vidéo</button>
+        </div>
+    </div>
+
     <!-- SCREEN 4: VIDEO GENERATION -->
     <div class="screen" id="screenGen">
         <div class="gen-container">
@@ -290,6 +328,7 @@ let currentScreen = 'screenHome';
 let currentListMode = null;   // 'projects' | 'services'
 let selectedTarget = null;    // { type, key, label, images }
 let selectedTheme = null;
+let pendingImages = [];
 let generatedBlob = null;
 
         // === INIT ===
@@ -381,6 +420,8 @@ function show(screen, data) {
         startGeneration(data);
     } else if (screen === 'subcat') {
         screen = 'screenSubcat';
+    } else if (screen === 'selection') {
+        screen = 'screenSelection';
     } else if (screen === 'screenHome') {
         // reset
     }
@@ -526,14 +567,14 @@ function goToGenOrSubcat(theme, target) {
         renderSubcats(subcats, images);
         goTo('subcat');
     } else {
-        goTo('gen', {theme, target, subcat: 'all'});
+        goToSelection(theme, target, 'all');
     }
 }
 
 function renderSubcats(subcats, images) {
     const grid = document.getElementById('subcatGrid');
     let html = `
-        <div class="theme-card" onclick="goTo('gen',{theme:selectedTheme, target:selectedTarget, subcat:'all'})">
+        <div class="theme-card" onclick="goToSelection(selectedTheme, selectedTarget, 'all')">
             <div class="t-icon">🏠</div>
             <h3>Projet Complet</h3>
             <p>Inclure toutes les pièces du projet.</p>
@@ -546,7 +587,7 @@ function renderSubcats(subcats, images) {
         const count = images.filter(i => (i.sous_categorie || 'Général') === sub).length;
         if (count === 0) return;
         html += `
-        <div class="theme-card" onclick="goTo('gen',{theme:selectedTheme, target:selectedTarget, subcat:'${esc(sub)}'})">
+        <div class="theme-card" onclick="goToSelection(selectedTheme, selectedTarget, '${esc(sub)}')">
             <div class="t-icon">${svcIcon(sub)}</div>
             <h3>${fmtService(sub)}</h3>
             <p>Se concentrer uniquement sur cette pièce.</p>
@@ -559,13 +600,76 @@ function renderSubcats(subcats, images) {
 }
 
 // ============================
+// MANUAL SELECTION
+// ============================
+function goToSelection(theme, target, subcat) {
+    let allImages = target.type === 'project'
+        ? db.filter(i => i.projet === target.key)
+        : db.filter(i => i.type_projet === target.key);
+
+    let images = [];
+    switch (theme) {
+        case 'result': images = allImages.filter(i => i.phase === 'après'); break;
+        case 'before_after': images = allImages.filter(i => i.phase === 'avant' || i.phase === 'après'); break;
+        case 'process': images = allImages.filter(i => i.phase !== 'non_defini'); break;
+        default: images = allImages;
+    }
+
+    if (subcat && subcat !== 'all') {
+        images = images.filter(i => (i.sous_categorie || 'Général') === subcat);
+    }
+    
+    // Sort process photos so they appear in correct order in the grid
+    if (theme === 'process') {
+        const phaseOrder = { avant: 0, pendant: 1, 'après': 2, non_defini: 3 };
+        images.sort((a,b) => (phaseOrder[a.phase]||3) - (phaseOrder[b.phase]||3));
+    }
+
+    pendingImages = images.map(img => ({ ...img, selected: true }));
+    renderSelectionGrid();
+    
+    selectedTheme = theme;
+    selectedTarget = target;
+    goTo('selection');
+}
+
+function renderSelectionGrid() {
+    const grid = document.getElementById('selGrid');
+    grid.innerHTML = pendingImages.map((img, idx) => `
+        <div class="sel-card ${img.selected ? '' : 'excluded'}" onclick="toggleImageSelection(${idx})">
+            <img src="${img.path}" loading="lazy">
+            <div class="sel-check"></div>
+            <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.5); font-size:10px; padding:2px; text-align:center;">${img.phase || ''}</div>
+        </div>
+    `).join('');
+    updateSelCount();
+}
+
+function toggleImageSelection(idx) {
+    pendingImages[idx].selected = !pendingImages[idx].selected;
+    renderSelectionGrid();
+}
+
+function updateSelCount() {
+    const c = pendingImages.filter(i => i.selected).length;
+    document.getElementById('selCountText').innerHTML = `<b>${c}</b> photos sélectionnées`;
+}
+
+function confirmSelectionAndGenerate() {
+    const finalImages = pendingImages.filter(i => i.selected);
+    if(finalImages.length === 0) return alert("Sélectionnez au moins une image !");
+    
+    goTo('gen', { theme: selectedTheme, target: selectedTarget, customImages: finalImages });
+}
+
+// ============================
 // VIDEO GENERATION
 // ============================
 let mediaRecorder = null;
 let recordedChunks = [];
 
 async function startGeneration(data) {
-    const { theme, target, subcat } = data;
+    const { theme, target, customImages } = data;
     generatedBlob = null;
     recordedChunks = [];
     
@@ -575,12 +679,8 @@ async function startGeneration(data) {
     document.querySelector('.progress-bar-outer').style.display = 'block';
     document.getElementById('btnDownload').disabled = true;
 
-    // Get images for this theme
-    let allImages = target.type === 'project'
-        ? db.filter(i => i.projet === target.key)
-        : db.filter(i => i.type_projet === target.key);
+    let images = customImages;
 
-    let images = [];
     const themeLabels = {
         result: 'Résultat seulement',
         before_after: 'Avant / Après',
@@ -591,29 +691,7 @@ async function startGeneration(data) {
     document.getElementById('genTitle').textContent = target.label;
     document.getElementById('genSub').textContent = themeLabels[theme] || theme;
 
-    switch (theme) {
-        case 'result':
-            images = allImages.filter(i => i.phase === 'après');
-            break;
-        case 'before_after':
-            const avant = allImages.filter(i => i.phase === 'avant');
-            const apres = allImages.filter(i => i.phase === 'après');
-            images = [...avant, ...apres];
-            break;
-        case 'process':
-            const phaseOrder = { avant: 0, pendant: 1, 'après': 2, non_defini: 3 };
-            images = allImages.filter(i => i.phase !== 'non_defini').sort((a,b) => (phaseOrder[a.phase]||3) - (phaseOrder[b.phase]||3));
-            break;
-        default:
-            images = allImages;
-    }
-
-    if (subcat && subcat !== 'all') {
-        images = images.filter(i => (i.sous_categorie || 'Général') === subcat);
-        document.getElementById('genSub').textContent += ` - ${fmtService(subcat)}`;
-    }
-
-    if (images.length === 0) {
+    if (!images || images.length === 0) {
         document.getElementById('genStatus').textContent = 'Aucune image disponible pour ce thème.';
         return;
     }
