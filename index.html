@@ -251,6 +251,15 @@
         <div class="theme-grid" id="themeGrid"></div>
     </div>
 
+    <!-- SCREEN 3.5: SUBCAT SELECTOR -->
+    <div class="screen" id="screenSubcat">
+        <div class="theme-header">
+            <h2 id="subcatTitle">Choix de la pièce</h2>
+            <p>Ce projet contient plusieurs types d'œuvres. Que souhaitez-vous mettre en avant ?</p>
+        </div>
+        <div class="theme-grid" id="subcatGrid"></div>
+    </div>
+
     <!-- SCREEN 4: VIDEO GENERATION -->
     <div class="screen" id="screenGen">
         <div class="gen-container">
@@ -258,6 +267,7 @@
             <p class="gen-sub" id="genSub"></p>
             <div class="canvas-wrapper">
                 <canvas id="videoCanvas" width="1080" height="1920"></canvas>
+                <video id="videoPreview" autoplay loop controls style="display: none; width: 270px; height: 480px; background: #000; border-radius: 10px;"></video>
             </div>
             <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
             <p class="gen-status" id="genStatus">Préparation…</p>
@@ -279,6 +289,7 @@ let history = [];
 let currentScreen = 'screenHome';
 let currentListMode = null;   // 'projects' | 'services'
 let selectedTarget = null;    // { type, key, label, images }
+let selectedTheme = null;
 let generatedBlob = null;
 
         // === INIT ===
@@ -289,8 +300,11 @@ let generatedBlob = null;
                 const res = await fetch(`chantiers_db.json?t=${ts}`);
                 db = await res.json();
                 document.getElementById('cntProjects').textContent = `${getProjects().length} projets`;
-    document.getElementById('cntServices').textContent = `${getServices().length} catégories`;
-}
+                document.getElementById('cntServices').textContent = `${getServices().length} catégories`;
+            } catch (error) {
+                console.error("Erreur de chargement des données:", error);
+            }
+        }
 
 // ============================
 // DATA
@@ -477,7 +491,7 @@ function renderThemes() {
 
     const grid = document.getElementById('themeGrid');
     grid.innerHTML = themes.map(t => `
-        <div class="theme-card" onclick="goTo('gen',{theme:'${t.id}',target:selectedTarget})">
+        <div class="theme-card" onclick="goToGenOrSubcat('${t.id}', selectedTarget)">
             <div class="t-icon">${t.icon}</div>
             <h3>${t.title}</h3>
             <p>${t.desc}</p>
@@ -487,15 +501,76 @@ function renderThemes() {
 }
 
 // ============================
+// SUBCAT SELECTION
+// ============================
+function goToGenOrSubcat(theme, target) {
+    let allImages = target.type === 'project'
+        ? db.filter(i => i.projet === target.key)
+        : db.filter(i => i.type_projet === target.key);
+
+    let images = [];
+    switch (theme) {
+        case 'result': images = allImages.filter(i => i.phase === 'après'); break;
+        case 'before_after': images = allImages.filter(i => i.phase === 'avant' || i.phase === 'après'); break;
+        case 'process': images = allImages.filter(i => i.phase !== 'non_defini'); break;
+        default: images = allImages;
+    }
+
+    const subcats = [...new Set(images.map(i => i.sous_categorie || 'Général').filter(s => s))];
+    
+    if (subcats.length > 1) {
+        selectedTheme = theme;
+        selectedTarget = target;
+        renderSubcats(subcats, images);
+        goTo('subcat');
+    } else {
+        goTo('gen', {theme, target, subcat: 'all'});
+    }
+}
+
+function renderSubcats(subcats, images) {
+    const grid = document.getElementById('subcatGrid');
+    let html = `
+        <div class="theme-card" onclick="goTo('gen',{theme:selectedTheme, target:selectedTarget, subcat:'all'})">
+            <div class="t-icon">🏠</div>
+            <h3>Projet Complet</h3>
+            <p>Inclure toutes les pièces du projet.</p>
+            <div class="t-count">${images.length} photos</div>
+        </div>
+    `;
+
+    subcats.forEach(sub => {
+        if (sub === 'Général') return;
+        const count = images.filter(i => (i.sous_categorie || 'Général') === sub).length;
+        if (count === 0) return;
+        html += `
+        <div class="theme-card" onclick="goTo('gen',{theme:selectedTheme, target:selectedTarget, subcat:'${esc(sub)}'})">
+            <div class="t-icon">${svcIcon(sub)}</div>
+            <h3>${fmtService(sub)}</h3>
+            <p>Se concentrer uniquement sur cette pièce.</p>
+            <div class="t-count">${count} photos</div>
+        </div>
+        `;
+    });
+
+    grid.innerHTML = html;
+}
+
+// ============================
 // VIDEO GENERATION
 // ============================
 let mediaRecorder = null;
 let recordedChunks = [];
 
 async function startGeneration(data) {
-    const { theme, target } = data;
+    const { theme, target, subcat } = data;
     generatedBlob = null;
     recordedChunks = [];
+    
+    document.getElementById('videoPreview').style.display = 'none';
+    document.getElementById('videoPreview').src = '';
+    document.getElementById('videoCanvas').style.display = 'block';
+    document.querySelector('.progress-bar-outer').style.display = 'block';
     document.getElementById('btnDownload').disabled = true;
 
     // Get images for this theme
@@ -529,6 +604,11 @@ async function startGeneration(data) {
             break;
         default:
             images = allImages;
+    }
+
+    if (subcat && subcat !== 'all') {
+        images = images.filter(i => (i.sous_categorie || 'Général') === subcat);
+        document.getElementById('genSub').textContent += ` - ${fmtService(subcat)}`;
     }
 
     if (images.length === 0) {
@@ -585,9 +665,16 @@ async function generateVideo(images, theme) {
     mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
     mediaRecorder.onstop = () => {
         generatedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(generatedBlob);
+        
+        document.getElementById('videoCanvas').style.display = 'none';
+        const vid = document.getElementById('videoPreview');
+        vid.src = url;
+        vid.style.display = 'block';
+        
+        document.querySelector('.progress-bar-outer').style.display = 'none';
         document.getElementById('btnDownload').disabled = false;
-        status.textContent = `✅ Vidéo générée ! (${loadedImgs.length} images, ${Math.round(generatedBlob.size/1024)}KB)`;
-        progress.style.width = '100%';
+        status.textContent = `✅ Vidéo générée ! Cliquez sur Lecture pour prévisualiser.`;
     };
 
     mediaRecorder.start();
