@@ -699,10 +699,10 @@ async function startGeneration(data) {
     // Limit to 30 images max for reasonable video length
     if (images.length > 30) images = images.slice(0, 30);
 
-    await generateVideo(images, theme);
+    await generateVideo(images, theme, target);
 }
 
-async function generateVideo(images, theme) {
+async function generateVideo(images, theme, target) {
     const canvas = document.getElementById('videoCanvas');
     const ctx = canvas.getContext('2d');
     const W = 1080, H = 1920;
