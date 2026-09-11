@@ -380,46 +380,76 @@
         </div>
     </div>
 
-    <!-- SCREEN 0.7: ACTUALITÉ TOPIC SELECTOR -->
+    <!-- SCREEN 0.7: ACTUALITÉ NEWS FEED SELECTOR -->
     <div class="screen" id="screenNewsTopic">
         <div class="theme-header">
-            <h2>Choix du sujet d'actualité</h2>
-            <p>Sélectionnez une thématique inspirée des grands médias du secteur BTP & Immobilier.</p>
+            <h2>Dernières Actualités & Inspirations Média</h2>
+            <p>Sélectionnez un sujet d'actualité et cliquez sur <strong>Générer l'article</strong> pour créer votre post LinkedIn.</p>
         </div>
-        <div class="theme-grid" id="newsTopicGrid">
-            <div class="theme-card" onclick="selectNewsTopic('maprimerenov')">
-                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Le Figaro Immobilier & France Rénov'</span>
-                <div class="t-icon">🌿</div>
-                <h3>Réforme MaPrimeRénov' 2026</h3>
-                <p>Priorité au Parcours Accompagné et aux rénovations d'ampleur (jusqu'à 80% de financement).</p>
+        
+        <div class="news-feed-list" style="display: flex; flex-direction: column; gap: 16px; max-width: 780px; margin: 0 auto 30px; text-align: left;">
+            
+            <!-- News Item 1 -->
+            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Le Figaro Immobilier & France Rénov'</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Réforme MaPrimeRénov' 2026 : Priorité au Parcours Accompagné et à la Rénovation d'Ampleur</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Le guichet Anah recentre ses subventions sur les rénovations globales. Les gestes isolés (fenêtres seules, poêles) ne sont plus financés à taux fort. Jusqu'à 80% de prise en charge pour les projets complets.</p>
+                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+                    <button class="btn btn-primary" onclick="selectNewsTopic('maprimerenov')">⚡ Générer l'article</button>
+                </div>
             </div>
-            <div class="theme-card" onclick="selectNewsTopic('dpe')">
-                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Le Moniteur & ADEME</span>
-                <div class="t-icon">⚡</div>
-                <h3>Nouveau Calcul DPE 2026</h3>
-                <p>Abaissement du coef électricité à 1,9 : 850 000 passoires thermiques revalorisées.</p>
+
+            <!-- News Item 2 -->
+            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Le Moniteur & Observatoire ADEME</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">DPE 2026 : Le nouveau coefficient électricité 1,9 fait sortir 850 000 passoires thermiques</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">L'Observatoire ADEME permet de télécharger la nouvelle attestation. Les logements chauffés à l'électricité gagnent 1 à 2 classes DPE. Comment franchir le cap vers la classe A/B.</p>
+                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+                    <button class="btn btn-primary" onclick="selectNewsTopic('dpe')">⚡ Générer l'article</button>
+                </div>
             </div>
-            <div class="theme-card" onclick="selectNewsTopic('amenagement')">
-                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Batirama & Les Echos</span>
-                <div class="t-icon">🏡</div>
-                <h3>Agencement Sur-Mesure & m² Optimisés</h3>
-                <p>Sous-escalier, verrière et optimisation du patrimoine en milieu urbain.</p>
+
+            <!-- News Item 3 -->
+            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Batirama & Les Echos Patrimoine</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Agencement Sur-Mesure : Optimiser chaque m² en milieu urbain</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Sous-escalier, verrière d'atelier, dressing et restructuration d'espaces contraints : le premier levier de valorisation patrimoniale dans les métropoles.</p>
+                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+                    <button class="btn btn-primary" onclick="selectNewsTopic('amenagement')">⚡ Générer l'article</button>
+                </div>
             </div>
-            <div class="theme-card" onclick="selectNewsTopic('tendances')">
-                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Batiweb & Moniteur Architecture</span>
-                <div class="t-icon">🎨</div>
-                <h3>Tendances Design & Matériaux 2026</h3>
-                <p>Zellige, robinetterie encastrée, essences de bois nobles et finitions artisanales.</p>
+
+            <!-- News Item 4 -->
+            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Batiweb & Moniteur Architecture</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Tendances Design & Finitions 2026 : Zellige, Bois Noble & Robinetterie Encastrée</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Le retour aux matières authentiques et aux finitions artisanales durables. Sélection des matériaux de caractère pour projets résidentiels.</p>
+                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+                    <button class="btn btn-primary" onclick="selectNewsTopic('tendances')">⚡ Générer l'article</button>
+                </div>
             </div>
+
         </div>
 
         <!-- Custom Topic Box -->
-        <div style="margin-top: 24px; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
-            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir un sujet personnalisé</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez la thématique ou l'actualité exacte que vous souhaitez aborder.</p>
+        <div style="max-width: 780px; margin: 0 auto; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir une actualité ou un sujet personnalisé</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez le sujet d'actualité exact que vous souhaitez traiter.</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="customTopicInput" placeholder="Ex: Audit énergétique obligatoire à Paris..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
-                <button class="btn btn-primary" onclick="submitCustomTopic()">Générer le post</button>
+                <input type="text" id="customTopicInput" placeholder="Ex: Audit énergétique obligatoire en copropriété à Paris..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
+                <button class="btn btn-primary" onclick="submitCustomTopic()">⚡ Générer l'article</button>
             </div>
         </div>
     </div>
@@ -460,8 +490,9 @@
             <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                 <button class="btn btn-primary" onclick="copyLinkedInText()">📋 Copier le texte</button>
                 <button class="btn btn-secondary" onclick="downloadLinkedInImage()">🖼️ Télécharger l'image</button>
+                <button class="btn btn-secondary" onclick="cycleLinkedInImage()">🖼️ Autre image</button>
                 <button class="btn btn-secondary" onclick="cycleLinkedInVariant()">🔄 Variante de texte</button>
-                <button class="btn btn-secondary" onclick="selectFormat('image')">👈 Autre post</button>
+                <button class="btn btn-secondary" onclick="selectFormat('image')">👈 Retour actualités</button>
             </div>
         </div>
     </div>
@@ -953,12 +984,18 @@ function copyLinkedInText() {
     });
 }
 
-function downloadLinkedInImage() {
-    if (!currentLinkedInPost.imagePath) return;
-    const a = document.createElement('a');
-    a.href = currentLinkedInPost.imagePath;
-    a.download = `etudereno-linkedin-${Date.now()}.webp`;
-    a.click();
+let imagePoolIndex = 0;
+
+function cycleLinkedInImage() {
+    if (!db || db.length === 0) return;
+    const apresImgs = db.filter(i => i.phase === 'après');
+    const pool = apresImgs.length > 0 ? apresImgs : db;
+    
+    imagePoolIndex = (imagePoolIndex + 1) % pool.length;
+    const newImgPath = pool[imagePoolIndex].path;
+    currentLinkedInPost.imagePath = newImgPath;
+    document.getElementById('linkedInImgPreview').src = newImgPath;
+    showToast("🖼️ Nouvelle proposition d'image chargée !");
 }
 
 function showToast(msg) {
