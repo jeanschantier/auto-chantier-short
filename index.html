@@ -383,70 +383,30 @@
     <!-- SCREEN 0.7: ACTUALITÉ NEWS FEED SELECTOR -->
     <div class="screen" id="screenNewsTopic">
         <div class="theme-header">
-            <h2>Dernières Actualités & Inspirations Média</h2>
-            <p>Sélectionnez un sujet d'actualité et cliquez sur <strong>Générer l'article</strong> pour créer votre post LinkedIn.</p>
+            <h2>Dernières Actualités BTP & Immobilier</h2>
+            <p>Sélectionnez un article et cliquez sur <strong>⚡ Générer l'article</strong> pour créer votre post LinkedIn.</p>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div style="max-width: 820px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 16px;">
+                <span style="font-size: 1.1rem;">🔍</span>
+                <input type="text" id="newsSearchInput" oninput="renderNewsFeed()" placeholder="Rechercher une actualité, loi, DPE, aides, agencement..." style="flex: 1; background: transparent; border: none; color: #fff; font-family: inherit; font-size: 0.92rem; outline: none;">
+            </div>
+
+            <div id="newsCategoryTabs" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                <!-- Filter buttons rendered by JS -->
+            </div>
         </div>
         
-        <div class="news-feed-list" style="display: flex; flex-direction: column; gap: 16px; max-width: 780px; margin: 0 auto 30px; text-align: left;">
-            
-            <!-- News Item 1 -->
-            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Le Figaro Immobilier & France Rénov'</span>
-                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
-                </div>
-                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Réforme MaPrimeRénov' 2026 : Priorité au Parcours Accompagné et à la Rénovation d'Ampleur</h3>
-                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Le guichet Anah recentre ses subventions sur les rénovations globales. Les gestes isolés (fenêtres seules, poêles) ne sont plus financés à taux fort. Jusqu'à 80% de prise en charge pour les projets complets.</p>
-                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
-                    <button class="btn btn-primary" onclick="selectNewsTopic('maprimerenov')">⚡ Générer l'article</button>
-                </div>
-            </div>
-
-            <!-- News Item 2 -->
-            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Le Moniteur & Observatoire ADEME</span>
-                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
-                </div>
-                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">DPE 2026 : Le nouveau coefficient électricité 1,9 fait sortir 850 000 passoires thermiques</h3>
-                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">L'Observatoire ADEME permet de télécharger la nouvelle attestation. Les logements chauffés à l'électricité gagnent 1 à 2 classes DPE. Comment franchir le cap vers la classe A/B.</p>
-                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
-                    <button class="btn btn-primary" onclick="selectNewsTopic('dpe')">⚡ Générer l'article</button>
-                </div>
-            </div>
-
-            <!-- News Item 3 -->
-            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Batirama & Les Echos Patrimoine</span>
-                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
-                </div>
-                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Agencement Sur-Mesure : Optimiser chaque m² en milieu urbain</h3>
-                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Sous-escalier, verrière d'atelier, dressing et restructuration d'espaces contraints : le premier levier de valorisation patrimoniale dans les métropoles.</p>
-                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
-                    <button class="btn btn-primary" onclick="selectNewsTopic('amenagement')">⚡ Générer l'article</button>
-                </div>
-            </div>
-
-            <!-- News Item 4 -->
-            <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.3s;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 Batiweb & Moniteur Architecture</span>
-                    <span style="font-size: 0.78rem; color: var(--text-muted);">Septembre 2026</span>
-                </div>
-                <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff; margin: 2px 0;">Tendances Design & Finitions 2026 : Zellige, Bois Noble & Robinetterie Encastrée</h3>
-                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Le retour aux matières authentiques et aux finitions artisanales durables. Sélection des matériaux de caractère pour projets résidentiels.</p>
-                <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
-                    <button class="btn btn-primary" onclick="selectNewsTopic('tendances')">⚡ Générer l'article</button>
-                </div>
-            </div>
-
+        <div class="news-feed-list" id="newsFeedList" style="display: flex; flex-direction: column; gap: 18px; max-width: 820px; margin: 0 auto 30px; text-align: left;">
+            <!-- Rendered by renderNewsFeed() -->
         </div>
 
         <!-- Custom Topic Box -->
-        <div style="max-width: 780px; margin: 0 auto; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
-            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir une actualité ou un sujet personnalisé</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez le sujet d'actualité exact que vous souhaitez traiter.</p>
+        <div style="max-width: 820px; margin: 0 auto; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir une actualité sur-mesure</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez le sujet d'actualité spécifique que vous souhaitez traiter.</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <input type="text" id="customTopicInput" placeholder="Ex: Audit énergétique obligatoire en copropriété à Paris..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
                 <button class="btn btn-primary" onclick="submitCustomTopic()">⚡ Générer l'article</button>
@@ -699,8 +659,293 @@ function fitCanvasText(ctx, text, maxWidth, maxLines = 3, startFontSize = 64) {
 }
 
 // ============================
-// LINKEDIN POST GENERATOR ENGINE
+// LINKEDIN POST GENERATOR ENGINE & 21-ITEM DATABASE
 // ============================
+
+let selectedNewsCategory = 'Tous';
+
+const NEWS_DATABASE = [
+    {
+        id: 'maprimerenov_reforme',
+        source: "Le Figaro Immobilier & France Rénov'",
+        sourceUrl: 'https://france-renov.gouv.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/projet-noisy-le-grand-amenagement-sous-escalier-et-cuisine-en-cours/apres/etudereno-amenagement-escalier-cuisine-noisy-le-grand-apres-a.webp',
+        title: "Réforme MaPrimeRénov' 2026 : Priorité stricte au Parcours Accompagné et à la Rénovation d'Ampleur",
+        teaser: "Le guichet Anah recentre ses subventions sur les rénovations globales. Les gestes isolés (fenêtres seules, poêles) ne sont plus financés à taux fort. Jusqu'à 80% de prise en charge pour les projets complets."
+    },
+    {
+        id: 'dpe_coef_19',
+        source: 'Le Moniteur & Observatoire ADEME',
+        sourceUrl: 'https://www.lemoniteur.fr',
+        category: 'DPE & Énergie',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/surenes/apres/etudereno-renovation-surenes-apres-a.webp',
+        title: "DPE 2026 : Le nouveau coefficient électricité 1,9 fait sortir 850 000 passoires thermiques",
+        teaser: "L'Observatoire ADEME met à disposition les nouvelles attestations. Les logements chauffés à l'électricité gagnent 1 à 2 classes DPE sans nouveaux travaux."
+    },
+    {
+        id: 'notaires_surcote',
+        source: 'Les Échos Patrimoine & Notaires de France',
+        sourceUrl: 'https://lesechos.fr',
+        category: 'Marché Immobilier',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/paris-16/apres/etudereno-renovation-paris-16-apres-a.webp',
+        title: "Cote Immobilière : Jusqu'à +20% de surcote pour les logements rénovés A/B en Île-de-France",
+        teaser: "Décote accélérée pour les Passoies F/G vs valorisation verte majeure pour les appartements réhabilités aux normes BBC."
+    },
+    {
+        id: 'materiaux_stabilite',
+        source: 'Batirama & Batiweb',
+        sourceUrl: 'https://www.batiweb.com',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/cuisine/projet-cuisine-baron/apres/etudereno-cuisine-baron-apres-a.webp',
+        title: "Stabilité des prix des matériaux BTP : Le grand retour des chantiers d'aménagement intérieur",
+        teaser: "Retour à la sérénité sur les tarifs du bois, carrelages zellige, pierre et structures IPN pour les projets résidentiels."
+    },
+    {
+        id: 'pac_fossiles',
+        source: 'Capital & Service-Public.fr',
+        sourceUrl: 'https://www.service-public.gouv.fr',
+        category: 'Équipements & Matériaux',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/ipn-meudon/apres/etudereno-ipn-meudon-apres-a.webp',
+        title: "Fin des subventions pour chaudières fioul/gaz : L'accélération vers la pompe à chaleur air-eau",
+        teaser: "L'Anah conditionne désormais l'accès aux aides d'ampleur à la sortie définitive du chauffage fossile."
+    },
+    {
+        id: 'agencement_urbain',
+        source: 'Le Parisien & Batiweb',
+        sourceUrl: 'https://www.leparisien.fr',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/extension-et-creation-de-2-niveaux-pour-dressing-et-sanitaire-hausmanien-paris-4-hotel-de-ville/apres/etudereno-extension-dressing-sanitaire-hausmanien-paris-4-apres-a.webp',
+        title: "Optimisation au m² : Pourquoi l'aménagement sous-escalier et verrière explose en ville",
+        teaser: "Dans les métropoles, réhabiliter les m² contraints avec des menuiseries intégrées constitue le 1er levier de valeur à la revente."
+    },
+    {
+        id: 'dpe_interdiction_locative',
+        source: 'Le Figaro Immobilier & Anah',
+        sourceUrl: 'https://immobilier.lefigaro.fr',
+        category: 'DPE & Énergie',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/lhay-les-roses/apres/etudereno-sdb-lhay-les-roses-apres-a.webp',
+        title: "Interdiction de louer les logements G et bientôt F : Le calendrier de mise aux normes pour les bailleurs",
+        teaser: "Rappel du calendrier réglementaire et des solutions d'isolation globale pour sécuriser la rentabilité locative."
+    },
+    {
+        id: 'zellige_tendance_2026',
+        source: 'Moniteur Architecture & Maison Magazine',
+        sourceUrl: 'https://www.lemoniteur.fr',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/projet-sdb-chartres-mme-m-morio-juillet-2025/apres/etudereno-sdb-chartres-apres-a.webp',
+        title: "Tendances Salle de Bain 2026 : Carrelage Zellige, Subway & Robinetterie encastrée laiton",
+        teaser: "Le retour aux finitions artisanales et aux matières naturelles douces pour des pièces d'eau intemporelles."
+    },
+    {
+        id: 'audit_energetique_obligatoire',
+        source: 'Service-Public.fr & ADEME',
+        sourceUrl: 'https://www.ademe.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/chantier-bondoufle/apres/etudereno-renovation-bondoufle-apres-a.webp',
+        title: "Audit Énergétique préalable : La pièce maîtresse obligatoire pour débloquer les aides MaPrimeRénov'",
+        teaser: "Sans étude technique préalable réalisée par un professionnel qualifié, aucun dossier de subvention globale ne peut être validé."
+    },
+    {
+        id: 'menuiserie_sur_mesure',
+        source: 'Batirama & Le Parisien',
+        sourceUrl: 'https://www.batirama.com',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-meudon/apres/etudereno-sdb-meudon-apres-a.webp',
+        title: "Menuiserie & Dressing sur-mesure : Transformer les sous-pentes et combles en espaces de vie",
+        teaser: "Exploiter les volumes perdus sous toiture pour créer des suites parentales et rangements intégrés esthétiques."
+    },
+    {
+        id: 'vmc_double_flux',
+        source: 'Que Choisir & France Rénov\'',
+        sourceUrl: 'https://france-renov.gouv.fr',
+        category: 'Équipements & Matériaux',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-bezons/apres/etudereno-sdb-bezons-apres-a.webp',
+        title: "Qualité de l'air intérieur : Pourquoi la VMC double flux est indissociable de l'isolation thermique",
+        teaser: "Une maison parfaitement isolée exige un renouvellement d'air performant pour éviter l'humidité et réduire la facture de chauffage."
+    },
+    {
+        id: 'haussmannien_restructuration',
+        source: 'Les Échos & Le Figaro Immobilier',
+        sourceUrl: 'https://lesechos.fr',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/extension-et-creation-de-2-niveaux-pour-dressing-et-sanitaire-hausmanien-paris-4-hotel-de-ville/apres/etudereno-extension-dressing-sanitaire-hausmanien-paris-4-apres-b.webp',
+        title: "Rénovation Haussmannienne à Paris : Conserver le cachet d'époque tout en intégrant le confort moderne",
+        teaser: "Moulures, parquets point de Hongrie et cheminées sublimés par une remise aux normes techniques invisibles."
+    },
+    {
+        id: 'copropriete_renovation',
+        source: 'Le Moniteur & Anah',
+        sourceUrl: 'https://www.lemoniteur.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/projet-noisy-le-grand-amenagement-sous-escalier-et-cuisine-en-cours/apres/etudereno-amenagement-escalier-cuisine-noisy-le-grand-apres-b.webp',
+        title: "Rénovation énergétique en copropriété : Les aides MaPrimeRénov' Copropriété revalorisées",
+        teaser: "Jusqu'à 45% de prise en charge sur les travaux d'isolation de façade et de toiture votés en assemblée générale."
+    },
+    {
+        id: 'verriere_atelier_lumiere',
+        source: 'Batiweb & Maison Magazine',
+        sourceUrl: 'https://www.batiweb.com',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/cuisine/cuisine-le-pecq/apres/etudereno-cuisine-le-pecq-apres-a.webp',
+        title: "Verrière d'Atelier & Cloisons Vitrées : Diffuser la lumière naturelle sans sacrifier l'intimité",
+        teaser: "Séparer la cuisine du séjour ou créer un coin bureau lumineux avec du verre feuilleté acoustique sur-mesure."
+    },
+    {
+        id: 'ite_isolation_exterieur',
+        source: 'Capital & ADEME',
+        sourceUrl: 'https://www.ademe.fr',
+        category: 'Équipements & Matériaux',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/rambouillet/apres/etudereno-rambouillet-apres-a.webp',
+        title: "Isolation Thermique par l'Extérieur (ITE) : Gagner 3 classes DPE sans perdre un seul m² intérieur",
+        teaser: "Le bouclier thermique par l'extérieur protège le bâtiment des ponts thermiques et embellit la façade."
+    },
+    {
+        id: 'eco_ptz_2026',
+        source: "Le Figaro Immobilier & Ministère de l'Économie",
+        sourceUrl: 'https://www.economie.gouv.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/portail-chene-rochechouart/apres/etudereno-portail-chene-rochechouart-apres-a.webp',
+        title: "Éco-PTZ à Taux Zéro jusqu'à 50 000 € : Financer son reste à charge sans frais d'intérêts",
+        teaser: "Comment cumuler l'Éco-Prêt à Taux Zéro avec MaPrimeRénov' pour financer 100% de son projet de rénovation."
+    },
+    {
+        id: 'carrelage_grand_format',
+        source: 'Batirama & Moniteur',
+        sourceUrl: 'https://www.batirama.com',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-nakachian-paris-16/etudereno-sdb-nakachian-paris-16-a.webp',
+        title: "Grands Formats & Béton Ciré : Les revêtements de sol tendance pour cuisines et salles de bain",
+        teaser: "Des dalles XXL et du béton ciré sans joints pour agrandir visuellement les espaces et faciliter le nettoyage."
+    },
+    {
+        id: 'escalier_sur_mesure',
+        source: 'Le Parisien & Batiweb',
+        sourceUrl: 'https://www.leparisien.fr',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/escalier-les-clayes-sous-bois/apres/etudereno-escalier-les-clayes-sous-bois-apres-a.webp',
+        title: "Escaliers Bois & Métal Sur-Mesure : Faire d'un élément de circulation une sculpture centrale",
+        teaser: "Intégration d'escaliers suspendus ou avec rangements sous marches pour structurer les duplex et maisons."
+    },
+    {
+        id: 'valeur_verte_location',
+        source: 'Les Échos Patrimoine & Notaires',
+        sourceUrl: 'https://lesechos.fr',
+        category: 'Marché Immobilier',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-noisy-mme-m-watrin-juillet-2025/apres/etudereno-sdb-noisy-apres-a.webp',
+        title: "Rendement Locatif & Valeur Verte : Pourquoi les investisseurs ciblent les biens à rénover entièrement",
+        teaser: "Acheter une passoire décotée, réaliser une rénovation globale déductible des impôts (déficit foncier) et relouer au prix fort."
+    },
+    {
+        id: 'cheminee_insert_pellet',
+        source: 'Que Choisir & Ademe',
+        sourceUrl: 'https://www.ademe.fr',
+        category: 'Équipements & Matériaux',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/chantier-jawad-montingy/Cheminée Jawad Montigny/apres et avant/apres/etudereno-cheminee-jawad-montigny-apres-a.webp',
+        title: "Modernisation de Foyer Ouvert : Poser un insert étanche pour multiplier par 5 le rendement de chauffe",
+        teaser: "Remplacer une cheminée traditionnelle par un foyer fermé moderne pour allier charme de la flamme et efficacité énergétique."
+    },
+    {
+        id: 'terrasse_etancheite_bois',
+        source: 'Batirama & Le Moniteur',
+        sourceUrl: 'https://www.batirama.com',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/Travaux en cours, étanchéité terrasse bois Darcy, manque le carrelage de sol/apres et avant/apres/etudereno-terrasse-bois-darcy-apres-a.webp',
+        title: "Étanchéité & Terrasse Bois : Sécuriser les extérieurs et prolonger la surface de vie en été",
+        teaser: "Mise en œuvre de membranes d'étanchéité sous terrasse et pose de lattes en bois exotique résistant."
+    }
+];
+
+function selectNewsCategory(cat) {
+    selectedNewsCategory = cat;
+    renderNewsFeed();
+}
+
+function renderNewsFeed() {
+    const listEl = document.getElementById('newsFeedList');
+    const tabsEl = document.getElementById('newsCategoryTabs');
+    if (!listEl) return;
+
+    const query = (document.getElementById('newsSearchInput')?.value || '').toLowerCase().trim();
+
+    const categories = ['Tous', 'Aides & Subventions', 'DPE & Énergie', 'Agencement & Architecture', 'Matériaux & Design', 'Marché Immobilier'];
+    tabsEl.innerHTML = categories.map(cat => `
+        <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 20px; ${selectedNewsCategory === cat ? 'background: var(--accent); color: var(--primary); font-weight: 700;' : ''}" onclick="selectNewsCategory('${cat}')">${cat}</button>
+    `).join('');
+
+    let filtered = NEWS_DATABASE;
+    if (selectedNewsCategory !== 'Tous') {
+        filtered = filtered.filter(n => n.category === selectedNewsCategory);
+    }
+    if (query) {
+        filtered = filtered.filter(n => 
+            n.title.toLowerCase().includes(query) || 
+            n.teaser.toLowerCase().includes(query) || 
+            n.source.toLowerCase().includes(query)
+        );
+    }
+
+    if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted);">Aucune actualité ne correspond à votre recherche.</div>`;
+        return;
+    }
+
+    listEl.innerHTML = filtered.map(item => `
+        <div style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 18px; align-items: flex-start; transition: border-color 0.3s; flex-wrap: wrap;" onmouseenter="this.style.borderColor='rgba(241,216,53,0.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <div style="width: 140px; height: 110px; border-radius: 12px; overflow: hidden; background: #000; flex-shrink: 0;">
+                <img src="${item.imagePath}" alt="${esc(item.title)}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.73rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">📰 ${item.source}</span>
+                    <span style="font-size: 0.76rem; color: var(--text-muted);">${item.date || 'Septembre 2026'}</span>
+                </div>
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: #fff; line-height: 1.35; margin: 0;">${item.title}</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">${item.teaser}</p>
+                <div style="margin-top: 8px; display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                    <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.78rem; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">🔗 Article Source</a>
+                    <button class="btn btn-primary" style="padding: 8px 18px; font-size: 0.82rem;" onclick="generateFromNewsItem('${item.id}')">⚡ Générer l'article</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function generateFromNewsItem(newsId) {
+    const newsItem = NEWS_DATABASE.find(n => n.id === newsId);
+    if (!newsItem) return;
+
+    generateLinkedInPost({
+        type: 'actualite',
+        topicKey: newsItem.id,
+        customTopic: newsItem.title,
+        newsItem: newsItem,
+        imagePath: newsItem.imagePath
+    });
+    goTo('screenPostResult');
+}
+
 const LINKEDIN_TEMPLATES = {
     actualite: {
         maprimerenov: [
@@ -942,7 +1187,45 @@ function generateLinkedInPost(config) {
     let variants = [];
     let imagePath = config.imagePath || '';
 
-    if (config.type === 'actualite') {
+    if (config.newsItem) {
+        const item = config.newsItem;
+        variants = [
+            () => `📢 [ACTUALITÉ MEDIA & EXPERTISE RÉNOVATION] ${item.title}
+
+D'après les dernières analyses transmises par ${item.source} (${item.sourceUrl}) :
+"${item.teaser}"
+
+Au Cabinet d'Étude EtudeReno, nous constatons quotidiennement l'impact concret de cette actualité sur les chantiers et la valeur immobilière des logements en Île-de-France.
+
+💡 L'analyse et les conseils de nos ingénieurs d'études :
+1️⃣ Anticiper la faisabilité technique par un diagnostic complet avant de démarrer.
+2️⃣ Structurer les travaux en un projet global pour optimiser confort et valorisation.
+3️⃣ Sélectionner des matériaux nobles et certifiés posés par des artisans qualifiés.
+
+💬 Que pensez-vous de cette évolution ? Échangeons en commentaire !
+
+---
+📲 Vous avez un projet de rénovation ou de réhabilitation ? Contactez notre équipe sur etudereno.fr.
+
+#${item.source.replace(/[^a-zA-Z0-9]/g, '')} #Rénovation #EtudeReno #Immobilier #BTP #ActualitéBTP`,
+
+            () => `🚨 [ZOOM PRESSE BTP & IMMOBILIER] ${item.title}
+
+Selon ${item.source} (${item.sourceUrl}) :
+"${item.teaser}"
+
+Chez EtudeReno, notre mission est de vous accompagner de A à Z dans l'optimisation technique, énergétique et esthétique de votre habitat.
+
+🎯 Nos garanties :
+🔹 Conseils sur-mesure adaptés aux dernières normes 2026
+🔹 Conception d'agencements durables et esthétiques
+🔹 Accompagnement clé en main de la conception à la réception
+
+📩 Une question sur votre logement ? Écrivez-nous en MP ou consultez etudereno.fr !
+
+#EtudeReno #BTP #Rénovation #Immobilier #ArchitectureIntérieure`
+        ].map(fn => fn());
+    } else if (config.type === 'actualite') {
         const key = config.topicKey || 'maprimerenov';
         const templates = LINKEDIN_TEMPLATES.actualite[key] || LINKEDIN_TEMPLATES.actualite.custom;
         variants = templates.map(fn => fn(config.customTopic || ''));
@@ -1066,6 +1349,9 @@ function show(screen, data) {
         screen = 'screenSubcat';
     } else if (screen === 'selection') {
         screen = 'screenSelection';
+    } else if (screen === 'screenNewsTopic') {
+        screen = 'screenNewsTopic';
+        renderNewsFeed();
     } else if (screen === 'screenFormatChoice') {
         // top root
     }
