@@ -1297,85 +1297,48 @@ function generateLinkedInPost(config) {
     let variants = [];
     let imagePath = config.imagePath || '';
 
-    if (config.newsItem) {
-        const item = config.newsItem;
-        variants = [
-            () => `📢 [ACTUALITÉ MEDIA & EXPERTISE RÉNOVATION] ${item.title}
-
-D'après les dernières analyses transmises par ${item.source} (${item.sourceUrl}) :
-"${item.teaser}"
-
-Au Cabinet d'Étude EtudeReno, nous constatons quotidiennement l'impact concret de cette actualité sur les chantiers et la valeur immobilière des logements en Île-de-France.
-
-💡 L'analyse et les conseils de nos ingénieurs d'études :
-1️⃣ Anticiper la faisabilité technique par un diagnostic complet avant de démarrer.
-2️⃣ Structurer les travaux en un projet global pour optimiser confort et valorisation.
-3️⃣ Sélectionner des matériaux nobles et certifiés posés par des artisans qualifiés.
-
-💬 Que pensez-vous de cette évolution ? Échangeons en commentaire !
-
----
-📲 Vous avez un projet de rénovation ou de réhabilitation ? Contactez notre équipe sur etudereno.fr.
-
-#${item.source.replace(/[^a-zA-Z0-9]/g, '')} #Rénovation #EtudeReno #Immobilier #BTP #ActualitéBTP`,
-
-            () => `🚨 [ZOOM PRESSE BTP & IMMOBILIER] ${item.title}
-
-Selon ${item.source} (${item.sourceUrl}) :
-"${item.teaser}"
-
-Chez EtudeReno, notre mission est de vous accompagner de A à Z dans l'optimisation technique, énergétique et esthétique de votre habitat.
-
-🎯 Nos garanties :
-🔹 Conseils sur-mesure adaptés aux dernières normes 2026
-🔹 Conception d'agencements durables et esthétiques
-🔹 Accompagnement clé en main de la conception à la réception
-
-📩 Une question sur votre logement ? Écrivez-nous en MP ou consultez etudereno.fr !
-
-#EtudeReno #BTP #Rénovation #Immobilier #ArchitectureIntérieure`
-        ].map(fn => fn());
-    } else if (config.type === 'actualite') {
+    if (config.type === 'actualite' || config.newsItem) {
         if (config.newsItem) {
             const item = config.newsItem;
             const srcName = (item.source || 'Media BTP').split('&')[0].trim();
             const tagCategory = (item.category || 'Renovation').replace(/[^a-zA-Z0-9]/g, '');
-            variants = [
-                `📰 [DÉCRYPTAGE MEDIA & ACTUALITÉ BTP] ${item.title}
 
-D'après les récentes publications de ${item.source} (${item.date || '2026'}) :
+            variants = [
+                `💡 ${item.title}
+
+D'après les récents éléments d'actualité transmis par ${item.source} (${item.date || '2026'}) :
 "${item.teaser}"
 
-💡 L'analyse & les recommandations de notre Cabinet d'Étude EtudeReno :
-1️⃣ Anticipation des règles techniques et administratives avant tout démarrage de travaux.
-2️⃣ Optimisation des performances énergétiques et des agencements sur-mesure.
-3️⃣ Accompagnement clé en main de l'audit jusqu'à la réception de chantier.
+L'éclairage de notre équipe chez EtudeReno :
+1️⃣ Penser la rénovation de manière globale avant d'engager le premier devis.
+2️⃣ Maximiser les performances énergétiques et la valeur patrimoniale de votre bien.
+3️⃣ Sécuriser l'ensemble des subventions et démarches administratives.
 
-Chez EtudeReno, nous transformons les exigences réglementaires et tendances en valeur patrimoniale pérenne.
+Chaque projet est unique. Notre mission au Cabinet d'Étude EtudeReno est de vous offrir une rénovation sereine, durable et parfaitement exécutée.
 
-💬 Que pensez-vous de cette évolution pour votre logement ou votre copropriété ?
+💬 Qu'en pensez-vous pour votre propre logement ou votre copropriété ?
 
 ---
-📲 Retrouvez nos conseils et demandez votre devis sur etudereno.fr
+📲 Retrouvez l'ensemble de nos conseils et demandez votre devis sur etudereno.fr
 🔗 Article Source : ${item.sourceUrl}
 
-#EtudeReno #${srcName.replace(/[^a-zA-Z0-9]/g, '')} #${tagCategory} #Rénovation #BTP #Immobilier #Architecture`,
+#EtudeReno #${srcName.replace(/[^a-zA-Z0-9]/g, '')} #${tagCategory} #Rénovation #Immobilier #BTP`,
 
-                `🚨 [ANALYSE PRESSE BTP & ÉNERGIE] ${item.title}
+                `Focus aujourd'hui sur une évolution clé du secteur : ${item.title}.
 
-Comme le soulignent les experts et les rédactions de ${item.source} :
-${item.teaser}
+Comme le soulignent les rédactions et experts de ${item.source} :
+"${item.teaser}"
 
-Au Cabinet d'Étude EtudeReno, nos ingénieurs et compagnons mettent en œuvre des solutions clés en main :
-🔹 Études de faisabilité & diagnostics précis
-🔹 Sélection de matériaux durables & équipements haute performance
-🔹 Pilotage et suivi rigoureux du chantier
+Au Cabinet d'Étude EtudeReno, nous traduisons ces enjeux réglementaires et techniques en solutions concrètes sur le terrain :
+🔹 Audits et diagnostics techniques approfondis
+🔹 Choix de matériaux nobles et finitions sur-mesure
+🔹 Suivi de chantier rigoureux et respect des engagements
 
-🎯 Résultat : Un confort thermique garanti, une baisse durable des factures et une plus-value immobilière sécurisée.
+🎯 L'objectif : Un confort de vie décuplé, des économies d'énergie durables et une vraie plus-value à la revente.
 
-📩 Un projet de rénovation ou d'aménagement en tête ? Échangeons dès aujourd'hui sur etudereno.fr !
+📩 Vous avez un projet en réflexion ? Échangeons directement en MP ou sur etudereno.fr !
 
-#${tagCategory} #EtudeReno #Immobilier #RénovationGlobale #BTP #TransitionEcologique`
+#${tagCategory} #EtudeReno #Immobilier #RénovationGlobale #Architecture`
             ];
         } else {
             const key = config.topicKey || 'maprimerenov';
