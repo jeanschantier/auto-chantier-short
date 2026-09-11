@@ -384,37 +384,41 @@
     <div class="screen" id="screenNewsTopic">
         <div class="theme-header">
             <h2>Choix du sujet d'actualité</h2>
-            <p>Sélectionnez un thème pour générer votre texte LinkedIn d'expert.</p>
+            <p>Sélectionnez une thématique inspirée des grands médias du secteur BTP & Immobilier.</p>
         </div>
         <div class="theme-grid" id="newsTopicGrid">
             <div class="theme-card" onclick="selectNewsTopic('maprimerenov')">
+                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Le Figaro Immobilier & France Rénov'</span>
                 <div class="t-icon">🌿</div>
-                <h3>MaPrimeRénov' & Subventions 2026</h3>
-                <p>Réduire le reste à charge, démarches et financements des travaux d'isolation & chauffage.</p>
+                <h3>Réforme MaPrimeRénov' 2026</h3>
+                <p>Priorité au Parcours Accompagné et aux rénovations d'ampleur (jusqu'à 80% de financement).</p>
             </div>
             <div class="theme-card" onclick="selectNewsTopic('dpe')">
+                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Le Moniteur & ADEME</span>
                 <div class="t-icon">⚡</div>
-                <h3>Passoires Thermiques & Audit DPE</h3>
-                <p>Passer de l'étiquette F/G à C/B pour valoriser le patrimoine et réduire les factures.</p>
+                <h3>Nouveau Calcul DPE 2026</h3>
+                <p>Abaissement du coef électricité à 1,9 : 850 000 passoires thermiques revalorisées.</p>
             </div>
             <div class="theme-card" onclick="selectNewsTopic('amenagement')">
+                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Batirama & Les Echos</span>
                 <div class="t-icon">🏡</div>
                 <h3>Agencement Sur-Mesure & m² Optimisés</h3>
-                <p>Sous-escalier, verrière, dressing et restructuration d'espaces urbains contraints.</p>
+                <p>Sous-escalier, verrière et optimisation du patrimoine en milieu urbain.</p>
             </div>
             <div class="theme-card" onclick="selectNewsTopic('tendances')">
+                <span style="background: rgba(241,216,53,0.15); color: #F1D835; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">📰 Inspiration : Batiweb & Moniteur Architecture</span>
                 <div class="t-icon">🎨</div>
                 <h3>Tendances Design & Matériaux 2026</h3>
-                <p>Zellige, robinetterie encastrée, essences de bois nobles et matériaux éco-responsables.</p>
+                <p>Zellige, robinetterie encastrée, essences de bois nobles et finitions artisanales.</p>
             </div>
         </div>
 
         <!-- Custom Topic Box -->
         <div style="margin-top: 24px; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
             <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir un sujet personnalisé</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez la thématique exacte que vous souhaitez aborder dans votre post.</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez la thématique ou l'actualité exacte que vous souhaitez aborder.</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="customTopicInput" placeholder="Ex: Isolation des combles aménagés à Versailles..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
+                <input type="text" id="customTopicInput" placeholder="Ex: Audit énergétique obligatoire à Paris..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
                 <button class="btn btn-primary" onclick="submitCustomTopic()">Générer le post</button>
             </div>
         </div>
@@ -669,129 +673,126 @@ function fitCanvasText(ctx, text, maxWidth, maxLines = 3, startFontSize = 64) {
 const LINKEDIN_TEMPLATES = {
     actualite: {
         maprimerenov: [
-            () => `📢 [ACTUALITÉ RÉNOVATION] MaPrimeRénov' 2026 : Comment maximiser vos subventions et réduire votre reste à charge ?
+            () => `📢 [DÉCRYPTAGE MEDIA BTP & REGLEMENTATION] Réforme MaPrimeRénov' 2026 : Ce que le tour de vis d'automne change pour vos projets !
 
-Sur le terrain, nous constatons trop souvent des propriétaires qui hésitent à engager leurs travaux d'isolation ou de chauffage par manque de lisibilité sur les aides financières disponibles.
+Comme le soulignent Le Figaro Immobilier et la gouvernance France Rénov', le guichet de subventions a recentré ses financements prioritaires sur la "Rénovation d'Ampleur" (le parcours accompagné) et la sortie définitive des énergies fossiles.
 
-Pourtant, en 2026, l'articulation de MaPrimeRénov' et des primes CEE (Certificats d'Économie d'Énergie) permet d'absorber jusqu'à 80% du coût global pour les rénovations d'ampleur !
+En résumé : les gestes isolés (remplacement de fenêtres seules, poêles sans isolation globale) ne sont plus financés à taux fort. L'État privilégie les projets complets permettant de gagner au moins 2 à 4 classes DPE !
 
-💡 Les 3 règles d'or pour un dossier 100% financé :
-1️⃣ Réaliser un Audit Énergétique préalable pour cibler les bouquets de travaux les plus performants.
-2️⃣ Faire appel exclusivement à une entreprise certifiée RGE (Reconnu Garant de l'Environnement).
-3️⃣ Valider le dépôt de dossier AVANT la signature définitive des devis et le début du chantier.
+💡 L'analyse de notre Cabinet d'Étude EtudeReno :
+1️⃣ Ne démarrez aucun chantier sans un Audit Énergétique préalable et l'accompagnement d'une entreprise certifiée RGE.
+2️⃣ Cumulez MaPrimeRénov' et les Primes CEE pour absorber jusqu'à 80% du coût global de vos travaux d'isolation et de chauffage.
+3️⃣ Déposez la demande de subvention AVANT la signature des devis et le démarrage du chantier.
 
-Chez EtudeReno, nous accompagnons nos clients à chaque étape : du diagnostic technique initial au montage complet des dossiers de subvention.
+Chez EtudeReno, nous assurons la prise en charge technique et le montage administratif complet pour sécuriser vos financements.
 
-💬 Et vous, où en êtes-vous dans votre projet de rénovation énergétique ?
+💬 Et vous, où en êtes-vous dans votre réflexion globale de rénovation ?
 
 ---
-📲 Vous souhaitez estimer le montant de vos aides ? Contactez-nous pour une étude personnalisée offerte sur etudereno.fr.
+📲 Vous souhaitez estimer le montant de vos aides ? Contactez notre équipe sur etudereno.fr.
 
-#RénovationÉnergétique #MaPrimeRenov #TransitionEcologique #EtudeReno #Immobilier #BTP #EconomiesEnergie`,
+#LeFigaroImmobilier #FranceRenov #MaPrimeRenov #TransitionEcologique #EtudeReno #Immobilier #BTP #EconomiesEnergie`,
 
-            () => `🚨 Propriétaires & Investisseurs : Ne laissez pas passer vos subventions de rénovation en 2026 !
+            () => `🚨 [ANALYSE PRESSE IMMOBILIÈRE] Subventions Rénovation 2026 : Pourquoi la rénovation globale est désormais obligatoire pour toucher les aides fortes.
 
-Entre la révision des plafonds de ressources et les nouvelles exigences du parcours accompagné pour les passoires thermiques, le paysage des aides financières évolue.
+Selon les enquêtes récentes de Batiweb et des médias spécialisés du bâtiment, les propriétaires qui investissent dans un parcours de rénovation d'ampleur constatent une baisse immédiate de 40% à 60% de leur facture d'énergie annuelle.
 
-Chez EtudeReno, notre rôle est d'apporter une sérénité totale à vos travaux :
-🔹 Isolation thermique haute performance (murs, combles, planchers)
-🔹 Remplacement des équipements de chauffage obsolètes
-🔹 Restructuration intérieure clé en main
+Chez EtudeReno, nous vous garantissons un accompagnement clé en main :
+🔹 Isolation thermique complète (murs, combles, planchers)
+🔹 Remplacement des systèmes énergivores par des pompes à chaleur performantes
+🔹 Réhabilitation intérieure avec finitions sur-mesure
 
-🎯 Le résultat : Jusqu'à 4 classes DPE gagnées, une valeur verte renforcée pour votre patrimoine et un confort optimal en toute saison.
+🎯 Résultat : Un gain de 3 à 4 classes au DPE, une valeur patrimoniale protégée et un confort inégalé.
 
-📩 Besoins d'un diagnostic d'expert pour votre logement ? Écrivez-nous en message privé ou contactez-nous sur etudereno.fr.
+📩 Vous désirez faire analyser votre bien par un expert ? Écrivez-nous en MP ou visitez etudereno.fr.
 
-#EtudeReno #MaPrimeRenov #BTP #ImmobilierIDF #RénovationGlobale #DiagnosticEnergetique`
+#EtudeReno #Batiweb #MaPrimeRenov #BTP #ImmobilierIDF #RénovationGlobale #AuditEnergetique`
         ],
 
         dpe: [
-            () => `⚡ Passoire thermique (DPE F & G) : Risque ou opportunité majeure pour votre patrimoine ?
+            () => `⚡ [EXCLUSIF MEDIA — ADEME & LE MONITEUR] Nouveau DPE 2026 : Le coefficient de l'électricité abaissé à 1,9 !
 
-Avec les restrictions d'augmentation des loyers et les interdictions progressives de mise en location, la rénovation énergétique est aujourd'hui le levier clé de revalorisation immobilière.
+C'est l'information phare relayée par Le Moniteur et l'ADEME : la révision du coefficient de conversion de l'électricité fait gagner 1 à 2 classes énergétiques à près de 850 000 logements chauffés à l'électricité, sans réaliser de nouveaux travaux !
 
-Un bien rénové énergétiquement et classé A ou B se vend en moyenne 15% à 20% plus cher qu'un bien énergivore non rénové en Île-de-France !
+Pour autant, pour passer durablement d'une passoire F/G à une étiquette performance A, B ou C, une intervention globale reste indispensable.
 
-🔍 Comment réussir le passage de l'étiquette G à l'étiquette C ou B ?
-✔️ Traiter l'isolation thermique périphérique pour supprimer les ponts thermiques.
-✔️ Installer une ventilation contrôlée (VMC double flux) pour maintenir une qualité d'air saine.
-✔️ Remplacer les menuiseries extérieures par du double vitrage à isolation renforcée.
+🔍 Les leviers recommandés par les experts EtudeReno :
+✔️ Isolation thermique périphérique pour éradiquer les ponts thermiques.
+✔️ Ventilation contrôlée VMC double flux pour assainir l'air intérieur.
+✔️ Menuiseries isolantes et rupture de pont thermique.
 
-Chez EtudeReno, nous concevons des scénarios d'intervention sur-mesure pour moderniser et pérenniser votre habitat.
+D'après Les Echos Patrimoine, un bien classé A ou B se revend avec une surcote moyenne de +15% à +20% en Île-de-France comparé à une passoire thermique !
 
-👇 Avez-vous déjà réalisé l'audit énergétique de votre bien ? Partagez votre expérience en commentaire !
+👇 Avez-vous déjà vérifié si votre étiquette DPE a été revalorisée sur l'Observatoire ADEME ?
 
-#Rénovation #DPE #PassoireThermique #Immobilier #EtudeReno #ArchitectureIntérieure #Valorisation`,
+#LeMoniteur #LesEchos #ADEME #DPE #PassoireThermique #EtudeReno #Immobilier #Rénovation`,
 
-            () => `📈 Valorisation Immobilière : Pourquoi la rénovation énergétique est le meilleur investissement en 2026.
+            () => `📈 [IMPACT MARCHÉ IMMOBILIER] Décote vs Surcote : L'éclairage de la Presse Spécialisée et des Notaires.
 
-Conserver un bien étiqueté F ou G au DPE engendre une décote systématique et des dépenses d'énergie incontrôlées.
+D'après les analyses relayées par Le Figaro Immobilier et la Chambre des Notaires, les passoires thermiques (DPE F & G) subissent une décote systématique à la revente, tandis que les biens rénovés aux normes BBC enregistrent une forte plus-value.
 
-En retravaillant l'enveloppe du bâtiment et les systèmes techniques, vous transformez une contrainte réglementaire en un véritable atout financier.
+Au Cabinet d'Étude EtudeReno, nous concevons des plans de réhabilitation précis pour transformer une contrainte réglementaire en opportunité financière majeure.
 
-Chez EtudeReno, nous orchestrons l'ensemble des corps d'état pour vous livrer un bien clé en main, sobre en énergie et aux finitions irréprochables.
+👉 Échangez avec un ingénieur d'étude EtudeReno sur etudereno.fr.
 
-👉 Contactez notre cabinet d'étude pour analyser la faisabilité de votre projet.
-
-#Immobilier #Rénovation #DPE #EtudeReno #BTP #Patrimoine`
+#Rénovation #Immobilier #DPE #LeFigaroImmobilier #EtudeReno #BTP #Valorisation`
         ],
 
         amenagement: [
-            () => `📐 Agencement sur-mesure : Comment gagner des m² précieux sans pousser les murs ?
+            () => `📐 [TENDANCE ARCHITECTURE & DESIGN] Agencement Sur-Mesure : Optimiser chaque m² en milieu urbain.
 
-En Île-de-France et en milieu urbain, chaque mètre carré a une valeur inestimable. Réhabiliter un sous-escalier, intégrer une verrière sur-mesure ou redistribuer les espaces permet de métamorphoser un intérieur.
+D'après une étude récente de Batirama et du secteur de l'aménagement, l'optimisation des volumes oubliés (sous-escalier, combles, espaces sous pentes) représente le premier levier de valorisation au m² dans les métropoles.
 
-💡 Les solutions sur-mesure conçues et réalisées par EtudeReno :
-✨ Meubles intégrés sous escalier et sous pentes
-✨ Séparations vitrées d'atelier pour maximiser la lumière naturelle
+💡 Les solutions emblématiques conçues et exécutées par EtudeReno :
+✨ Aménagements sous-escalier bois/métal sur-mesure
+✨ Verrières d'atelier et cloisons vitrées pour diffuser la lumière naturelle
 ✨ Création de dressing et sanitaire optimisé dans les espaces contraints
 
-Chez EtudeReno, nous combinons ingénierie du bâtiment et sensibilité architecturale pour révéler le plein potentiel de votre logement.
+Chez EtudeReno, nous marions la rigueur de l'ingénierie BTP et l'élégance du design d'intérieur.
 
-🔗 Explorez nos études et réalisations sur etudereno.fr
+🔗 Découvrez nos études de cas et réalisations sur etudereno.fr
 
-#ArchitectureInterieure #DesignSurMesure #Aménagement #EtudeReno #RénovationParis #GainDEspace`,
+#Batirama #ArchitectureInterieure #DesignSurMesure #Aménagement #EtudeReno #RénovationParis #GainDEspace`,
 
-            () => `💡 Optimisation d'espace : Le secret d'une rénovation réussie en appartement.
+            () => `💡 [CONSEILS ARTISANAT BTP] Le secret d'une réhabilitation réussie d'appartement haussmannien ou moderne.
 
-Un aménagement mal pensé peut étouffer les pièces et faire perdre du volume utile. À l'inverse, une conception réfléchie crée des flux fluides et des rangements invisibles.
+Comme le rappellent Les Echos et Capital, rénover en ville nécessite d'allier préservation du cachet de l'ancien (moulures, parquet, cheminée) et intégration de réseaux techniques invisibles et performants.
 
-Nos équipes d'études et d'artisans façonnent vos espaces avec précision : menuiseries intégrées, cloisons coulissantes, intégration de verrières et verres de synthèse.
+Nos équipes d'études et nos artisans compagnons façonnent votre intérieur sur-mesure pour un résultat pérenne.
 
-📩 Vous désirez réagencer votre logement ? Écrivez-nous pour échanger sur vos envies !
+📩 Vous avez un projet de réagencement ? Contactez-nous pour une étude personnalisée !
 
-#DesignInterieur #AménagementSurMesure #EtudeReno #RénovationAppartement #IDF`
+#DesignInterieur #AménagementSurMesure #EtudeReno #RénovationAppartement #Capital #LesEchos`
         ],
 
         tendances: [
-            () => `🎨 Tendances Rénovation 2026 : Quels matériaux et finitions privilégier pour son intérieur ?
+            () => `🎨 [TENDANCES MEDIA 2026] Matériaux Nobles & Durabilité : Ce qu'en disent les revues d'architecture.
 
-Pour qu'un projet d'aménagement reste élégant et pérenne dans le temps, la sélection des matériaux est essentielle.
+Selon les tendances analysées par Le Moniteur Architecture et Batiweb, l'année 2026 consacre le retour aux matières authentiques et aux textures naturelles.
 
-Cette année, les tendances valorisent l'authenticité et les textures chaleureuses :
-🌿 Carrelages Zellige et Subway aux teintes douces et artisanales
-🪵 Essences de bois naturel (chêne, noyer) apportant chaleur et noblesse
-🚿 Robinetterie encastrée aux finitions laiton brossé ou noir mat
-🏛️ Rénovation soignée des éléments de caractère (moulures haussmanniennes, cheminées)
+🌿 Carrelage effet Zellige et Subway aux nuances douces
+🪵 Essences de bois nobles (chêne clair, noyer) pour un confort chaleureux
+🚿 Robinetterie encastrée laiton brossé ou noir mat
+🏛️ Restauration soignée des éléments de caractère anciens
 
-Chez EtudeReno, nous sélectionnons des matériaux durables et raffinés, mis en œuvre par des compagnons qualifiés.
+Chez EtudeReno, nous sélectionnons des matériaux durables posés par des compagnons exigeants.
 
-💡 Quelle finition vous séduit le plus pour votre prochaine rénovation ?
+💡 Quelle finition préférez-vous pour votre futur projet ?
 
-#DesignInterieur #RénovationMaison #Décoration #EtudeReno #SavoirFaire #ArtisanatBTP`
+#LeMoniteur #Batiweb #DesignInterieur #RénovationMaison #Décoration #EtudeReno #SavoirFaire`,
         ],
 
         custom: [
-            (topic) => `🏗️ [EXPERTISE RÉNOVATION] ${topic}
+            (topic) => `🏗️ [ANALYSE MEDIA & EXPERTISE BTP] ${topic}
 
-Au Cabinet d'Étude pour la Rénovation (EtudeReno), nous sommes convaincus que chaque projet de travaux exige une méthode rigoureuse, transparente et sur-mesure.
+Au Cabinet d'Étude pour la Rénovation (EtudeReno), nous suivons de près l'actualité du bâtiment et de l'immobilier relayée par les grands médias du secteur (Le Moniteur, Le Figaro Immobilier, Batiweb).
 
-Qu'il s'agisse de rénovation énergétique globale, de restructuration d'appartement ou d'aménagement haute finition, notre équipe d'experts et d'artisans vous accompagne à chaque étape :
-🔹 Diagnostic et études techniques préalables
-🔹 Choix des matériaux et conception sur-mesure
+Notre conviction : chaque projet exige une méthode scientifique, transparente et sur-mesure.
+
+🔹 Diagnostic et études techniques de faisabilité
+🔹 Choix de matériaux nobles et éco-responsables
 🔹 Pilotage de chantier et contrôle qualité strict
 
-💡 Notre engagement : Valoriser votre patrimoine immobilier et sublimer votre confort au quotidien.
 
 📩 Un projet de rénovation en vue ? Échangeons dès aujourd'hui sur etudereno.fr !
 
