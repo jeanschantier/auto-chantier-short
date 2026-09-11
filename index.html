@@ -228,6 +228,103 @@
             .grid { grid-template-columns: 1fr; }
             .container { padding: 20px 14px 80px; }
         }
+
+        /* === LINKEDIN CARD & MULTI-FORMAT STYLING === */
+        .linkedin-card {
+            background: rgba(255,255,255,0.035);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .linkedin-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .linkedin-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(241,216,53,0.25);
+            flex-shrink: 0;
+        }
+        .linkedin-author .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+        .linkedin-author .sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        .linkedin-textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 16px;
+            color: #f3f4f6;
+            font-family: inherit;
+            font-size: 0.92rem;
+            line-height: 1.65;
+            min-height: 280px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 18px;
+            transition: border-color 0.3s;
+        }
+        .linkedin-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(241,216,53,0.15);
+        }
+        .linkedin-img-wrap {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #000;
+            max-height: 420px;
+        }
+        .linkedin-img-wrap img {
+            width: 100%;
+            height: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+        .toast {
+            position: fixed;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--primary);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 9999;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            animation: toastPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes toastPop {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
     </style>
 </head>
 <body>
@@ -239,8 +336,134 @@
 
 <div class="container">
 
-    <!-- SCREEN 1: HOME -->
-    <div class="screen active" id="screenHome">
+    <!-- SCREEN 0: FORMAT CHOICE (NEW ENTRY POINT) -->
+    <div class="screen active" id="screenFormatChoice">
+        <div class="hero">
+            <h1>Générez vos <em>contenus de communication</em></h1>
+            <p>Quel type de post souhaitez-vous créer aujourd'hui ?</p>
+        </div>
+        <div class="mode-grid">
+            <div class="mode-btn" onclick="selectFormat('video')">
+                <div class="icon">🎬</div>
+                <h2>Post Vidéo</h2>
+                <p>Short / Reel vertical avec style média Le Parisien et logo EtudeReno</p>
+                <div class="count">Shorts & Reels</div>
+            </div>
+            <div class="mode-btn" onclick="selectFormat('image')">
+                <div class="icon">🖼️</div>
+                <h2>Post Image (LinkedIn)</h2>
+                <p>Post professionnel prêt à publier avec texte rédigé d'expert et photo d'illustration</p>
+                <div class="count">LinkedIn & Réseaux</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 0.5: LINKEDIN TYPE CHOICE -->
+    <div class="screen" id="screenImageType">
+        <div class="hero">
+            <h1>Post <em>LinkedIn</em></h1>
+            <p>Quel est l'objectif de votre post aujourd'hui ?</p>
+        </div>
+        <div class="mode-grid">
+            <div class="mode-btn" onclick="selectImageType('actualite')">
+                <div class="icon">📰</div>
+                <h2>Post Actualité</h2>
+                <p>Normes RGE, MaPrimeRénov', audit DPE, conseils & tendances rénovation</p>
+                <div class="count">Informations & Aides</div>
+            </div>
+            <div class="mode-btn" onclick="selectImageType('realisation')">
+                <div class="icon">🏗️</div>
+                <h2>Post Réalisation</h2>
+                <p>Mettre en valeur un chantier réel ou service d'EtudeReno (avant / après, résultat)</p>
+                <div class="count">Chantiers EtudeReno</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 0.7: ACTUALITÉ TOPIC SELECTOR -->
+    <div class="screen" id="screenNewsTopic">
+        <div class="theme-header">
+            <h2>Choix du sujet d'actualité</h2>
+            <p>Sélectionnez un thème pour générer votre texte LinkedIn d'expert.</p>
+        </div>
+        <div class="theme-grid" id="newsTopicGrid">
+            <div class="theme-card" onclick="selectNewsTopic('maprimerenov')">
+                <div class="t-icon">🌿</div>
+                <h3>MaPrimeRénov' & Subventions 2026</h3>
+                <p>Réduire le reste à charge, démarches et financements des travaux d'isolation & chauffage.</p>
+            </div>
+            <div class="theme-card" onclick="selectNewsTopic('dpe')">
+                <div class="t-icon">⚡</div>
+                <h3>Passoires Thermiques & Audit DPE</h3>
+                <p>Passer de l'étiquette F/G à C/B pour valoriser le patrimoine et réduire les factures.</p>
+            </div>
+            <div class="theme-card" onclick="selectNewsTopic('amenagement')">
+                <div class="t-icon">🏡</div>
+                <h3>Agencement Sur-Mesure & m² Optimisés</h3>
+                <p>Sous-escalier, verrière, dressing et restructuration d'espaces urbains contraints.</p>
+            </div>
+            <div class="theme-card" onclick="selectNewsTopic('tendances')">
+                <div class="t-icon">🎨</div>
+                <h3>Tendances Design & Matériaux 2026</h3>
+                <p>Zellige, robinetterie encastrée, essences de bois nobles et matériaux éco-responsables.</p>
+            </div>
+        </div>
+
+        <!-- Custom Topic Box -->
+        <div style="margin-top: 24px; padding: 22px; background: rgba(255,255,255,0.035); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">✍️ Saisir un sujet personnalisé</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 14px;">Entrez la thématique exacte que vous souhaitez aborder dans votre post.</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="customTopicInput" placeholder="Ex: Isolation des combles aménagés à Versailles..." style="flex: 1; min-width: 240px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;">
+                <button class="btn btn-primary" onclick="submitCustomTopic()">Générer le post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 0.8: LINKEDIN PHOTO SELECTOR FOR RÉALISATION -->
+    <div class="screen" id="screenLinkedInPhoto">
+        <div class="theme-header">
+            <h2 id="linkedInPhotoTitle">Choisir la photo d'illustration</h2>
+            <p>Sélectionnez la photo du chantier à associer au post LinkedIn.</p>
+        </div>
+        <div class="sel-grid" id="linkedInPhotoGrid"></div>
+    </div>
+
+    <!-- SCREEN 0.9: LINKEDIN POST RESULT -->
+    <div class="screen" id="screenPostResult">
+        <div class="theme-header">
+            <h2>Votre post LinkedIn est prêt !</h2>
+            <p>Modifiez le texte si besoin, copiez-le et téléchargez l'image d'illustration.</p>
+        </div>
+
+        <div style="max-width: 640px; margin: 0 auto;">
+            <div class="linkedin-card">
+                <div class="linkedin-header">
+                    <div class="linkedin-avatar">ER</div>
+                    <div class="linkedin-author">
+                        <div class="name">Cabinet d'Étude pour la Rénovation (EtudeReno)</div>
+                        <div class="sub">Entreprise de Rénovation • À l'instant • 🌐</div>
+                    </div>
+                </div>
+
+                <textarea id="linkedInText" class="linkedin-textarea" spellcheck="false" placeholder="Texte du post LinkedIn..."></textarea>
+
+                <div class="linkedin-img-wrap" id="linkedInImgWrap">
+                    <img id="linkedInImgPreview" src="" alt="Illustration LinkedIn">
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="copyLinkedInText()">📋 Copier le texte</button>
+                <button class="btn btn-secondary" onclick="downloadLinkedInImage()">🖼️ Télécharger l'image</button>
+                <button class="btn btn-secondary" onclick="cycleLinkedInVariant()">🔄 Variante de texte</button>
+                <button class="btn btn-secondary" onclick="selectFormat('image')">👈 Autre post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 1: VIDEO HOME -->
+    <div class="screen" id="screenHome">
         <div class="hero">
             <h1>Générez votre <em>vidéo de présentation</em></h1>
             <p>Choisissez un projet ou un service, sélectionnez un thème, et la vidéo se génère automatiquement.</p>
@@ -318,16 +541,22 @@
 
 </div>
 
+<!-- TOAST NOTIFICATION -->
+<div id="toastNotification" class="toast" style="display: none;">📋 Texte copié dans le presse-papier !</div>
+
 <script>
 // ============================
 // STATE
 // ============================
 let db = [];
 let history = [];
-let currentScreen = 'screenHome';
-let currentListMode = null;   // 'projects' | 'services'
-let selectedTarget = null;    // { type, key, label, images }
+let currentScreen = 'screenFormatChoice';
+let currentFormat = 'video';        // 'video' | 'image'
+let linkedinPostType = 'actualite'; // 'actualite' | 'realisation'
+let currentListMode = null;        // 'projects' | 'services'
+let selectedTarget = null;         // { type, key, label, images }
 let selectedTheme = null;
+let currentLinkedInPost = { text: '', imagePath: '', variants: [], variantIndex: 0 };
 let pendingImages = [];
 let generatedBlob = null;
 
@@ -434,13 +663,337 @@ function fitCanvasText(ctx, text, maxWidth, maxLines = 3, startFontSize = 64) {
     return { lines, fontSize, lineHeight };
 }
 
+// ============================
+// LINKEDIN POST GENERATOR ENGINE
+// ============================
+const LINKEDIN_TEMPLATES = {
+    actualite: {
+        maprimerenov: [
+            () => `📢 [ACTUALITÉ RÉNOVATION] MaPrimeRénov' 2026 : Comment maximiser vos subventions et réduire votre reste à charge ?
+
+Sur le terrain, nous constatons trop souvent des propriétaires qui hésitent à engager leurs travaux d'isolation ou de chauffage par manque de lisibilité sur les aides financières disponibles.
+
+Pourtant, en 2026, l'articulation de MaPrimeRénov' et des primes CEE (Certificats d'Économie d'Énergie) permet d'absorber jusqu'à 80% du coût global pour les rénovations d'ampleur !
+
+💡 Les 3 règles d'or pour un dossier 100% financé :
+1️⃣ Réaliser un Audit Énergétique préalable pour cibler les bouquets de travaux les plus performants.
+2️⃣ Faire appel exclusivement à une entreprise certifiée RGE (Reconnu Garant de l'Environnement).
+3️⃣ Valider le dépôt de dossier AVANT la signature définitive des devis et le début du chantier.
+
+Chez EtudeReno, nous accompagnons nos clients à chaque étape : du diagnostic technique initial au montage complet des dossiers de subvention.
+
+💬 Et vous, où en êtes-vous dans votre projet de rénovation énergétique ?
+
+---
+📲 Vous souhaitez estimer le montant de vos aides ? Contactez-nous pour une étude personnalisée offerte sur etudereno.fr.
+
+#RénovationÉnergétique #MaPrimeRenov #TransitionEcologique #EtudeReno #Immobilier #BTP #EconomiesEnergie`,
+
+            () => `🚨 Propriétaires & Investisseurs : Ne laissez pas passer vos subventions de rénovation en 2026 !
+
+Entre la révision des plafonds de ressources et les nouvelles exigences du parcours accompagné pour les passoires thermiques, le paysage des aides financières évolue.
+
+Chez EtudeReno, notre rôle est d'apporter une sérénité totale à vos travaux :
+🔹 Isolation thermique haute performance (murs, combles, planchers)
+🔹 Remplacement des équipements de chauffage obsolètes
+🔹 Restructuration intérieure clé en main
+
+🎯 Le résultat : Jusqu'à 4 classes DPE gagnées, une valeur verte renforcée pour votre patrimoine et un confort optimal en toute saison.
+
+📩 Besoins d'un diagnostic d'expert pour votre logement ? Écrivez-nous en message privé ou contactez-nous sur etudereno.fr.
+
+#EtudeReno #MaPrimeRenov #BTP #ImmobilierIDF #RénovationGlobale #DiagnosticEnergetique`
+        ],
+
+        dpe: [
+            () => `⚡ Passoire thermique (DPE F & G) : Risque ou opportunité majeure pour votre patrimoine ?
+
+Avec les restrictions d'augmentation des loyers et les interdictions progressives de mise en location, la rénovation énergétique est aujourd'hui le levier clé de revalorisation immobilière.
+
+Un bien rénové énergétiquement et classé A ou B se vend en moyenne 15% à 20% plus cher qu'un bien énergivore non rénové en Île-de-France !
+
+🔍 Comment réussir le passage de l'étiquette G à l'étiquette C ou B ?
+✔️ Traiter l'isolation thermique périphérique pour supprimer les ponts thermiques.
+✔️ Installer une ventilation contrôlée (VMC double flux) pour maintenir une qualité d'air saine.
+✔️ Remplacer les menuiseries extérieures par du double vitrage à isolation renforcée.
+
+Chez EtudeReno, nous concevons des scénarios d'intervention sur-mesure pour moderniser et pérenniser votre habitat.
+
+👇 Avez-vous déjà réalisé l'audit énergétique de votre bien ? Partagez votre expérience en commentaire !
+
+#Rénovation #DPE #PassoireThermique #Immobilier #EtudeReno #ArchitectureIntérieure #Valorisation`,
+
+            () => `📈 Valorisation Immobilière : Pourquoi la rénovation énergétique est le meilleur investissement en 2026.
+
+Conserver un bien étiqueté F ou G au DPE engendre une décote systématique et des dépenses d'énergie incontrôlées.
+
+En retravaillant l'enveloppe du bâtiment et les systèmes techniques, vous transformez une contrainte réglementaire en un véritable atout financier.
+
+Chez EtudeReno, nous orchestrons l'ensemble des corps d'état pour vous livrer un bien clé en main, sobre en énergie et aux finitions irréprochables.
+
+👉 Contactez notre cabinet d'étude pour analyser la faisabilité de votre projet.
+
+#Immobilier #Rénovation #DPE #EtudeReno #BTP #Patrimoine`
+        ],
+
+        amenagement: [
+            () => `📐 Agencement sur-mesure : Comment gagner des m² précieux sans pousser les murs ?
+
+En Île-de-France et en milieu urbain, chaque mètre carré a une valeur inestimable. Réhabiliter un sous-escalier, intégrer une verrière sur-mesure ou redistribuer les espaces permet de métamorphoser un intérieur.
+
+💡 Les solutions sur-mesure conçues et réalisées par EtudeReno :
+✨ Meubles intégrés sous escalier et sous pentes
+✨ Séparations vitrées d'atelier pour maximiser la lumière naturelle
+✨ Création de dressing et sanitaire optimisé dans les espaces contraints
+
+Chez EtudeReno, nous combinons ingénierie du bâtiment et sensibilité architecturale pour révéler le plein potentiel de votre logement.
+
+🔗 Explorez nos études et réalisations sur etudereno.fr
+
+#ArchitectureInterieure #DesignSurMesure #Aménagement #EtudeReno #RénovationParis #GainDEspace`,
+
+            () => `💡 Optimisation d'espace : Le secret d'une rénovation réussie en appartement.
+
+Un aménagement mal pensé peut étouffer les pièces et faire perdre du volume utile. À l'inverse, une conception réfléchie crée des flux fluides et des rangements invisibles.
+
+Nos équipes d'études et d'artisans façonnent vos espaces avec précision : menuiseries intégrées, cloisons coulissantes, intégration de verrières et verres de synthèse.
+
+📩 Vous désirez réagencer votre logement ? Écrivez-nous pour échanger sur vos envies !
+
+#DesignInterieur #AménagementSurMesure #EtudeReno #RénovationAppartement #IDF`
+        ],
+
+        tendances: [
+            () => `🎨 Tendances Rénovation 2026 : Quels matériaux et finitions privilégier pour son intérieur ?
+
+Pour qu'un projet d'aménagement reste élégant et pérenne dans le temps, la sélection des matériaux est essentielle.
+
+Cette année, les tendances valorisent l'authenticité et les textures chaleureuses :
+🌿 Carrelages Zellige et Subway aux teintes douces et artisanales
+🪵 Essences de bois naturel (chêne, noyer) apportant chaleur et noblesse
+🚿 Robinetterie encastrée aux finitions laiton brossé ou noir mat
+🏛️ Rénovation soignée des éléments de caractère (moulures haussmanniennes, cheminées)
+
+Chez EtudeReno, nous sélectionnons des matériaux durables et raffinés, mis en œuvre par des compagnons qualifiés.
+
+💡 Quelle finition vous séduit le plus pour votre prochaine rénovation ?
+
+#DesignInterieur #RénovationMaison #Décoration #EtudeReno #SavoirFaire #ArtisanatBTP`
+        ],
+
+        custom: [
+            (topic) => `🏗️ [EXPERTISE RÉNOVATION] ${topic}
+
+Au Cabinet d'Étude pour la Rénovation (EtudeReno), nous sommes convaincus que chaque projet de travaux exige une méthode rigoureuse, transparente et sur-mesure.
+
+Qu'il s'agisse de rénovation énergétique globale, de restructuration d'appartement ou d'aménagement haute finition, notre équipe d'experts et d'artisans vous accompagne à chaque étape :
+🔹 Diagnostic et études techniques préalables
+🔹 Choix des matériaux et conception sur-mesure
+🔹 Pilotage de chantier et contrôle qualité strict
+
+💡 Notre engagement : Valoriser votre patrimoine immobilier et sublimer votre confort au quotidien.
+
+📩 Un projet de rénovation en vue ? Échangeons dès aujourd'hui sur etudereno.fr !
+
+#EtudeReno #Rénovation #BTP #Immobilier #ArchitectureIntérieure #SavoirFaire`
+        ]
+    },
+
+    realisation: [
+        (projName, pieceName) => `✨ [RÉALISATION ETUDERENO] Focus sur la métamorphose de ce chantier${projName ? ' : ' + projName : ''}${pieceName ? ' (' + pieceName + ')' : ''} !
+
+Découvrez le travail soigné accompli par nos équipes sur ce projet de rénovation.
+
+🎯 L'enjeu du projet :
+Repenser et moderniser cet espace pour lui offrir une fonctionnalité maximale, une grande luminosité et des finitions élégantes.
+
+🛠️ Les interventions réalisées par nos artisans :
+✔️ Préparation technique des supports et réseaux
+✔️ Pose de revêtements et matériaux haute durabilité
+✔️ Intégration d'éclairages et d'équipements sur-mesure
+✔️ Contrôle de qualité rigoureux à chaque étape du chantier
+
+Le résultat ? Un intérieur chaleureux, fonctionnel et parfaitement adapté aux attentes de nos clients.
+
+💬 Que pensez-vous de cette réalisation ? Laissez-nous votre avis en commentaire !
+
+---
+📲 Un projet similaire en tête ? Demandez votre étude personnalisée et votre devis gratuit sur etudereno.fr
+
+#EtudeReno #AvantApres #Rénovation #BTP #ArchitectureIntérieure #Artisanat #Immobilier`,
+
+        (projName, pieceName) => `🏠 [ZOOM SUR NOS CHANTIERS] Une belle métamorphose signée EtudeReno${projName ? ' — ' + projName : ''} !
+
+Chaque projet de rénovation est l'occasion d'exprimer notre exigence technique et notre passion du bel ouvrage.
+
+Sur cette réalisation${pieceName ? ' (' + pieceName + ')' : ''}, nos compagnons sont intervenus pour créer un environnement harmonieux et pérenne :
+🔹 Optimisation des volumes et de la distribution
+🔹 Sélection de finitions haut de gamme et faciles d'entretien
+🔹 Respect strict des délais annoncés
+
+Chez EtudeReno, nous sécurisons vos travaux de A à Z avec un interlocuteur unique.
+
+👉 Des travaux à envisager chez vous ? Contactez-nous en MP pour en discuter !
+
+#Rénovation #EtudeReno #Chantier #Design #BTP #ÎleDeFrance #RénovationAppartement`
+    ]
+};
+
+function getActualiteSampleImage(topicKey) {
+    if (!db || db.length === 0) return '';
+    const apresImgs = db.filter(i => i.phase === 'après');
+    let pool = apresImgs.length > 0 ? apresImgs : db;
+    
+    if (topicKey === 'maprimerenov' || topicKey === 'dpe') {
+        const reno = pool.filter(i => i.category === 'renovation-complete');
+        return (reno[0] || pool[0]).path;
+    } else if (topicKey === 'amenagement') {
+        const esc = pool.filter(i => (i.path || '').includes('escalier') || (i.path || '').includes('dressing'));
+        return (esc[0] || pool[0]).path;
+    } else if (topicKey === 'tendances') {
+        const sdb = pool.filter(i => i.category === 'salle-de-bain' || i.category === 'cuisine');
+        return (sdb[0] || pool[0]).path;
+    }
+    return pool[0] ? pool[0].path : '';
+}
+
+function selectNewsTopic(key, customVal) {
+    selectedNewsTopic = key;
+    const topicVal = customVal || document.getElementById('customTopicInput').value.trim();
+    const sampleImg = getActualiteSampleImage(key);
+    
+    generateLinkedInPost({
+        type: 'actualite',
+        topicKey: key,
+        customTopic: topicVal,
+        imagePath: sampleImg
+    });
+    goTo('screenPostResult');
+}
+
+function submitCustomTopic() {
+    const val = document.getElementById('customTopicInput').value.trim();
+    if (!val) return;
+    selectNewsTopic('custom', val);
+}
+
+function renderLinkedInPhotoSelector(target) {
+    selectedTarget = target;
+    let images = target.type === 'project'
+        ? db.filter(i => i.projet === target.key)
+        : db.filter(i => i.type_projet === target.key);
+
+    const apresImgs = images.filter(i => i.phase === 'après');
+    if (apresImgs.length > 0) images = apresImgs;
+
+    document.getElementById('linkedInPhotoTitle').textContent = `Photos : ${target.label}`;
+
+    const grid = document.getElementById('linkedInPhotoGrid');
+    grid.innerHTML = images.map((img) => `
+        <div class="sel-card" onclick="selectLinkedInPhoto('${esc(img.path)}')">
+            <img src="${img.path}" loading="lazy">
+            <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); font-size:11px; padding:4px; text-align:center;">${img.phase || ''}</div>
+        </div>
+    `).join('');
+}
+
+function selectLinkedInPhoto(imgPath) {
+    generateLinkedInPost({
+        type: 'realisation',
+        target: selectedTarget,
+        imagePath: imgPath
+    });
+    goTo('screenPostResult');
+}
+
+function generateLinkedInPost(config) {
+    let variants = [];
+    let imagePath = config.imagePath || '';
+
+    if (config.type === 'actualite') {
+        const key = config.topicKey || 'maprimerenov';
+        const templates = LINKEDIN_TEMPLATES.actualite[key] || LINKEDIN_TEMPLATES.actualite.custom;
+        variants = templates.map(fn => fn(config.customTopic || ''));
+    } else {
+        const projName = config.target ? config.target.label : '';
+        const pieceName = config.piece || '';
+        variants = LINKEDIN_TEMPLATES.realisation.map(fn => fn(projName, pieceName));
+    }
+
+    currentLinkedInPost = {
+        text: variants[0],
+        imagePath: imagePath,
+        variants: variants,
+        variantIndex: 0
+    };
+
+    document.getElementById('linkedInText').value = currentLinkedInPost.text;
+    document.getElementById('linkedInImgPreview').src = currentLinkedInPost.imagePath;
+}
+
+function cycleLinkedInVariant() {
+    if (!currentLinkedInPost.variants || currentLinkedInPost.variants.length <= 1) return;
+    currentLinkedInPost.variantIndex = (currentLinkedInPost.variantIndex + 1) % currentLinkedInPost.variants.length;
+    currentLinkedInPost.text = currentLinkedInPost.variants[currentLinkedInPost.variantIndex];
+    document.getElementById('linkedInText').value = currentLinkedInPost.text;
+    showToast("🔄 Variante de texte chargée !");
+}
+
+function copyLinkedInText() {
+    const txt = document.getElementById('linkedInText').value;
+    if (!txt) return;
+    navigator.clipboard.writeText(txt).then(() => {
+        showToast("📋 Texte copié dans le presse-papier !");
+    }).catch(() => {
+        const ta = document.getElementById('linkedInText');
+        ta.select();
+        document.execCommand('copy');
+        showToast("📋 Texte copié !");
+    });
+}
+
+function downloadLinkedInImage() {
+    if (!currentLinkedInPost.imagePath) return;
+    const a = document.createElement('a');
+    a.href = currentLinkedInPost.imagePath;
+    a.download = `etudereno-linkedin-${Date.now()}.webp`;
+    a.click();
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('toastNotification');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2800);
+}
+
 function bestThumb(imgs) {
     return imgs.find(i=>i.phase==='après') || imgs.find(i=>i.phase==='pendant') || imgs[0];
 }
 
 // ============================
-// NAVIGATION
+// NAVIGATION & FORMAT ROUTING
 // ============================
+function selectFormat(type) {
+    currentFormat = type;
+    if (type === 'video') {
+        goTo('screenHome');
+    } else {
+        goTo('screenImageType');
+    }
+}
+
+function selectImageType(type) {
+    linkedinPostType = type;
+    if (type === 'actualite') {
+        goTo('screenNewsTopic');
+    } else {
+        goTo('list', 'projects');
+    }
+}
+
 function goTo(screen, data) {
     history.push({ screen: currentScreen, data: currentListMode });
     show(screen, data);
@@ -448,7 +1001,7 @@ function goTo(screen, data) {
 
 function goBack() {
     const prev = history.pop();
-    if (!prev) { show('screenHome'); return; }
+    if (!prev) { show('screenFormatChoice'); return; }
     show(prev.screen, prev.data);
 }
 
@@ -461,8 +1014,13 @@ function show(screen, data) {
         screen = 'screenList';
     } else if (screen === 'theme') {
         selectedTarget = data;
-        renderThemes();
-        screen = 'screenTheme';
+        if (currentFormat === 'image') {
+            renderLinkedInPhotoSelector(data);
+            screen = 'screenLinkedInPhoto';
+        } else {
+            renderThemes();
+            screen = 'screenTheme';
+        }
     } else if (screen === 'gen') {
         screen = 'screenGen';
         startGeneration(data);
@@ -470,13 +1028,13 @@ function show(screen, data) {
         screen = 'screenSubcat';
     } else if (screen === 'selection') {
         screen = 'screenSelection';
-    } else if (screen === 'screenHome') {
-        // reset
+    } else if (screen === 'screenFormatChoice') {
+        // top root
     }
 
     currentScreen = screen;
     document.getElementById(screen).classList.add('active');
-    document.getElementById('btnBack').classList.toggle('show', screen !== 'screenHome');
+    document.getElementById('btnBack').classList.toggle('show', screen !== 'screenFormatChoice');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
