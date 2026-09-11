@@ -452,6 +452,7 @@
                 <button class="btn btn-secondary" onclick="downloadLinkedInImage()">🖼️ Télécharger l'image</button>
                 <button class="btn btn-secondary" onclick="cycleLinkedInImage()">🖼️ Autre image</button>
                 <button class="btn btn-secondary" onclick="cycleLinkedInVariant()">🔄 Variante de texte</button>
+                <a id="sourceArticleBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 9px 16px; font-size: 0.82rem; text-decoration: none; display: none; align-items: center; gap: 6px; background: rgba(241,216,53,0.15); border: 1px solid rgba(241,216,53,0.4); color: #F1D835; font-weight: 600;">🔗 Article Source</a>
                 <button class="btn btn-secondary" onclick="selectFormat('image')">👈 Retour actualités</button>
             </div>
         </div>
@@ -673,7 +674,7 @@ const NEWS_DATABASE = [
         date: 'Septembre 2026',
         imagePath: 'images/renovation-complete/projet-noisy-le-grand-amenagement-sous-escalier-et-cuisine-en-cours/apres/etudereno-amenagement-escalier-cuisine-noisy-le-grand-apres-a.webp',
         title: "Réforme MaPrimeRénov' 2026 : Priorité stricte au Parcours Accompagné et à la Rénovation d'Ampleur",
-        teaser: "Le guichet Anah recentre ses subventions sur les rénovations globales. Les gestes isolés (fenêtres seules, poêles) ne sont plus financés à taux fort. Jusqu'à 80% de prise en charge pour les projets complets."
+        teaser: "Le guichet Anah recentre ses subventions sur les rénovations globales. Les gestes isolés ne sont plus financés à taux fort. Jusqu'à 80% de prise en charge pour les projets complets."
     },
     {
         id: 'dpe_coef_19',
@@ -709,7 +710,7 @@ const NEWS_DATABASE = [
         id: 'pac_fossiles',
         source: 'Capital & Service-Public.fr',
         sourceUrl: 'https://www.service-public.gouv.fr',
-        category: 'Équipements & Matériaux',
+        category: 'Équipements & Isolation',
         date: 'Septembre 2026',
         imagePath: 'images/autre/ipn-meudon/apres/etudereno-ipn-meudon-apres-a.webp',
         title: "Fin des subventions pour chaudières fioul/gaz : L'accélération vers la pompe à chaleur air-eau",
@@ -767,9 +768,9 @@ const NEWS_DATABASE = [
     },
     {
         id: 'vmc_double_flux',
-        source: 'Que Choisir & France Rénov\'',
+        source: "Que Choisir & France Rénov'",
         sourceUrl: 'https://france-renov.gouv.fr',
-        category: 'Équipements & Matériaux',
+        category: 'Équipements & Isolation',
         date: 'Septembre 2026',
         imagePath: 'images/salle-de-bain/sdb-bezons/apres/etudereno-sdb-bezons-apres-a.webp',
         title: "Qualité de l'air intérieur : Pourquoi la VMC double flux est indissociable de l'isolation thermique",
@@ -809,7 +810,7 @@ const NEWS_DATABASE = [
         id: 'ite_isolation_exterieur',
         source: 'Capital & ADEME',
         sourceUrl: 'https://www.ademe.fr',
-        category: 'Équipements & Matériaux',
+        category: 'Équipements & Isolation',
         date: 'Septembre 2026',
         imagePath: 'images/autre/rambouillet/apres/etudereno-rambouillet-apres-a.webp',
         title: "Isolation Thermique par l'Extérieur (ITE) : Gagner 3 classes DPE sans perdre un seul m² intérieur",
@@ -859,7 +860,7 @@ const NEWS_DATABASE = [
         id: 'cheminee_insert_pellet',
         source: 'Que Choisir & Ademe',
         sourceUrl: 'https://www.ademe.fr',
-        category: 'Équipements & Matériaux',
+        category: 'Équipements & Isolation',
         date: 'Septembre 2026',
         imagePath: 'images/renovation-complete/chantier-jawad-montingy/Cheminée Jawad Montigny/apres et avant/apres/etudereno-cheminee-jawad-montigny-apres-a.webp',
         title: "Modernisation de Foyer Ouvert : Poser un insert étanche pour multiplier par 5 le rendement de chauffe",
@@ -874,6 +875,116 @@ const NEWS_DATABASE = [
         imagePath: 'images/autre/Travaux en cours, étanchéité terrasse bois Darcy, manque le carrelage de sol/apres et avant/apres/etudereno-terrasse-bois-darcy-apres-a.webp',
         title: "Étanchéité & Terrasse Bois : Sécuriser les extérieurs et prolonger la surface de vie en été",
         teaser: "Mise en œuvre de membranes d'étanchéité sous terrasse et pose de lattes en bois exotique résistant."
+    },
+    {
+        id: 'tva_reduite_55',
+        source: "Ministère de l'Économie & Batiweb",
+        sourceUrl: 'https://www.economie.gouv.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/cuisine/projet-cuisine-baron/apres/etudereno-cuisine-baron-apres-b.webp',
+        title: "TVA réduite à 5,5% pour les travaux d'économie d'énergie : Mode d'emploi 2026",
+        teaser: "Appliquée directement sur la facture de travaux par les entreprises certifiées RGE pour l'isolation et le chauffage performant."
+    },
+    {
+        id: 'audit_dpe_projete',
+        source: 'ADEME & Le Moniteur',
+        sourceUrl: 'https://www.ademe.fr',
+        category: 'DPE & Énergie',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/surenes/apres/etudereno-renovation-surenes-apres-a.webp',
+        title: "DPE Projeté avant Achat : Sécuriser son investissement immobilier avant signature du compromis",
+        teaser: "Estimer précisément le coût de réhabilitation thermique et la future étiquette énergétique avant même l'acquisition."
+    },
+    {
+        id: 'deficit_foncier_booste',
+        source: 'Les Échos Patrimoine & Notaires de France',
+        sourceUrl: 'https://lesechos.fr',
+        category: 'Marché Immobilier',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/paris-16/apres/etudereno-renovation-paris-16-apres-a.webp',
+        title: "Déficit Foncier Doublé à 21 400 € : L'avantage fiscal imbattable pour la rénovation locative",
+        teaser: "Déduire le montant de vos chantiers de rénovation thermique directement de vos revenus globaux imposables."
+    },
+    {
+        id: 'isolation_combles_perdus',
+        source: "France Rénov' & Le Figaro Immobilier",
+        sourceUrl: 'https://france-renov.gouv.fr',
+        category: 'Équipements & Isolation',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/projet-noisy-le-grand-amenagement-sous-escalier-et-cuisine-en-cours/apres/etudereno-amenagement-escalier-cuisine-noisy-le-grand-apres-a.webp',
+        title: "Isolation des Combles : Stopper 30% des pertes de chaleur de la maison en 48 heures",
+        teaser: "La laine de roche ou ouate de cellulose soufflée sous toiture : l'investissement au temps de retour le plus rapide."
+    },
+    {
+        id: 'suite_parentale_combles',
+        source: 'Maison Magazine & Batirama',
+        sourceUrl: 'https://www.batirama.com',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/extension-et-creation-de-2-niveaux-pour-dressing-et-sanitaire-hausmanien-paris-4-hotel-de-ville/apres/etudereno-extension-dressing-sanitaire-hausmanien-paris-4-apres-a.webp',
+        title: "Création d'une Suite Parentale dans les Combles : Réinventer l'espace sous toiture",
+        teaser: "Intégration d'une salle d'eau, dressing sur-mesure et fenêtres de toit motorisées avec volet solaire intégré."
+    },
+    {
+        id: 'cuisine_ouverte_ilot',
+        source: 'Batiweb & Le Parisien',
+        sourceUrl: 'https://www.batiweb.com',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/cuisine/cuisine-le-pecq/apres/etudereno-cuisine-le-pecq-apres-a.webp',
+        title: "Cuisine Ouverte avec Îlot Central : La pièce de vie préférée des ménages français",
+        teaser: "Abattage de cloison porteuse, pose de poutre IPN et intégration d'équipements encastrés pour un espace convivial."
+    },
+    {
+        id: 'pompe_a_chaleur_hybride',
+        source: 'ADEME & Que Choisir',
+        sourceUrl: 'https://www.ademe.fr',
+        category: 'Équipements & Isolation',
+        date: 'Septembre 2026',
+        imagePath: 'images/autre/ipn-meudon/apres/etudereno-ipn-meudon-apres-a.webp',
+        title: "Pompe à Chaleur Hybride : L'alliance ultime entre thermodynamique et confort d'appoint",
+        teaser: "Basculer automatiquement sur l'énergie la plus économique selon la température extérieure et les tarifs heures creuses."
+    },
+    {
+        id: 'prime_cee_cumul',
+        source: "France Rénov' & Service-Public.fr",
+        sourceUrl: 'https://france-renov.gouv.fr',
+        category: 'Aides & Subventions',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/chantier-bondoufle/apres/etudereno-renovation-bondoufle-apres-a.webp',
+        title: "Primes CEE (Certificats d'Économie d'Énergie) : Comment cumuler avec MaPrimeRénov' en 2026",
+        teaser: "Financer la partie restante de vos travaux grâce aux primes versées par les fournisseurs d'énergie."
+    },
+    {
+        id: 'salle_de_bain_pmr_italienne',
+        source: 'Le Moniteur & Batirama',
+        sourceUrl: 'https://www.lemoniteur.fr',
+        category: 'Matériaux & Design',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-meudon/apres/etudereno-sdb-meudon-apres-a.webp',
+        title: "Douche à l'Italienne & Adaptabilité : Sécurité, confort et design contemporain pour la salle de bain",
+        teaser: "Suppression du bac à douche classique pour un sol de plain-pied en receveur extra-plat antidérapant."
+    },
+    {
+        id: 'restauration_parquet_ancien',
+        source: 'Le Figaro Immobilier & Les Échos',
+        sourceUrl: 'https://immobilier.lefigaro.fr',
+        category: 'Agencement & Architecture',
+        date: 'Septembre 2026',
+        imagePath: 'images/renovation-complete/paris-16/apres/etudereno-renovation-paris-16-apres-a.webp',
+        title: "Restauration des Parquets Chêne & Point de Hongrie : Ponçage, vitrification et traitement naturel",
+        teaser: "Redonner vie aux parquets centenaires en conservant leur authenticité et en renforçant la résistance aux passages."
+    },
+    {
+        id: 'menuiseries_triple_vitrage',
+        source: 'Batirama & ADEME',
+        sourceUrl: 'https://www.batirama.com',
+        category: 'Équipements & Isolation',
+        date: 'Septembre 2026',
+        imagePath: 'images/salle-de-bain/sdb-bezons/apres/etudereno-sdb-bezons-apres-a.webp',
+        title: "Fenêtres Alu & PVC Haute Performance : Confort acoustique urbain et rupture de pont thermique",
+        teaser: "Réduire les nuisances sonores de la rue tout en empêchant le froid hivernal et la surchauffe estivale."
     }
 ];
 
@@ -889,7 +1000,7 @@ function renderNewsFeed() {
 
     const query = (document.getElementById('newsSearchInput')?.value || '').toLowerCase().trim();
 
-    const categories = ['Tous', 'Aides & Subventions', 'DPE & Énergie', 'Agencement & Architecture', 'Matériaux & Design', 'Marché Immobilier'];
+    const categories = ['Tous', 'Aides & Subventions', 'DPE & Énergie', 'Agencement & Architecture', 'Matériaux & Design', 'Marché Immobilier', 'Équipements & Isolation'];
     tabsEl.innerHTML = categories.map(cat => `
         <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 20px; ${selectedNewsCategory === cat ? 'background: var(--accent); color: var(--primary); font-weight: 700;' : ''}" onclick="selectNewsCategory('${cat}')">${cat}</button>
     `).join('');
@@ -1226,9 +1337,52 @@ Chez EtudeReno, notre mission est de vous accompagner de A à Z dans l'optimisat
 #EtudeReno #BTP #Rénovation #Immobilier #ArchitectureIntérieure`
         ].map(fn => fn());
     } else if (config.type === 'actualite') {
-        const key = config.topicKey || 'maprimerenov';
-        const templates = LINKEDIN_TEMPLATES.actualite[key] || LINKEDIN_TEMPLATES.actualite.custom;
-        variants = templates.map(fn => fn(config.customTopic || ''));
+        if (config.newsItem) {
+            const item = config.newsItem;
+            const srcName = (item.source || 'Media BTP').split('&')[0].trim();
+            const tagCategory = (item.category || 'Renovation').replace(/[^a-zA-Z0-9]/g, '');
+            variants = [
+                `📰 [DÉCRYPTAGE MEDIA & ACTUALITÉ BTP] ${item.title}
+
+D'après les récentes publications de ${item.source} (${item.date || '2026'}) :
+"${item.teaser}"
+
+💡 L'analyse & les recommandations de notre Cabinet d'Étude EtudeReno :
+1️⃣ Anticipation des règles techniques et administratives avant tout démarrage de travaux.
+2️⃣ Optimisation des performances énergétiques et des agencements sur-mesure.
+3️⃣ Accompagnement clé en main de l'audit jusqu'à la réception de chantier.
+
+Chez EtudeReno, nous transformons les exigences réglementaires et tendances en valeur patrimoniale pérenne.
+
+💬 Que pensez-vous de cette évolution pour votre logement ou votre copropriété ?
+
+---
+📲 Retrouvez nos conseils et demandez votre devis sur etudereno.fr
+🔗 Article Source : ${item.sourceUrl}
+
+#EtudeReno #${srcName.replace(/[^a-zA-Z0-9]/g, '')} #${tagCategory} #Rénovation #BTP #Immobilier #Architecture`,
+
+                `🚨 [ANALYSE PRESSE BTP & ÉNERGIE] ${item.title}
+
+Comme le soulignent les experts et les rédactions de ${item.source} :
+${item.teaser}
+
+Au Cabinet d'Étude EtudeReno, nos ingénieurs et compagnons mettent en œuvre des solutions clés en main :
+🔹 Études de faisabilité & diagnostics précis
+🔹 Sélection de matériaux durables & équipements haute performance
+🔹 Pilotage et suivi rigoureux du chantier
+
+🎯 Résultat : Un confort thermique garanti, une baisse durable des factures et une plus-value immobilière sécurisée.
+
+📩 Un projet de rénovation ou d'aménagement en tête ? Échangeons dès aujourd'hui sur etudereno.fr !
+
+#${tagCategory} #EtudeReno #Immobilier #RénovationGlobale #BTP #TransitionEcologique`
+            ];
+        } else {
+            const key = config.topicKey || 'maprimerenov';
+            const templates = LINKEDIN_TEMPLATES.actualite[key] || LINKEDIN_TEMPLATES.actualite.custom;
+            variants = templates.map(fn => fn(config.customTopic || ''));
+        }
     } else {
         const projName = config.target ? config.target.label : '';
         const pieceName = config.piece || '';
@@ -1244,6 +1398,17 @@ Chez EtudeReno, notre mission est de vous accompagner de A à Z dans l'optimisat
 
     document.getElementById('linkedInText').value = currentLinkedInPost.text;
     document.getElementById('linkedInImgPreview').src = currentLinkedInPost.imagePath;
+
+    const sourceBtn = document.getElementById('sourceArticleBtn');
+    if (sourceBtn) {
+        if (config.newsItem && config.newsItem.sourceUrl) {
+            sourceBtn.style.display = 'inline-flex';
+            sourceBtn.href = config.newsItem.sourceUrl;
+            sourceBtn.innerHTML = `🔗 Article Source (${(config.newsItem.source || '').split('&')[0].trim()})`;
+        } else {
+            sourceBtn.style.display = 'none';
+        }
+    }
 }
 
 function cycleLinkedInVariant() {
